@@ -174,10 +174,10 @@ public static class AddonManager
     /// </summary>
     public static string? Run(AddonManifest addon, string folder, string? selection)
     {
-        if (addon.IsBuiltin) return "встроенный аддон запускается изнутри программы";
+        if (addon.IsBuiltin) return LanguageManager.Tr("L_BuiltinAddon");
 
         string entry = Path.Combine(addon.Directory, addon.Entry);
-        if (!File.Exists(entry)) return "не найден файл запуска: " + addon.Entry;
+        if (!File.Exists(entry)) return string.Format(LanguageManager.Tr("L_AddonEntryNotFound"), addon.Entry);
 
         try
         {
@@ -198,7 +198,7 @@ public static class AddonManager
         }
         catch (Exception ex)
         {
-            return "не удалось запустить: " + ex.Message;
+            return string.Format(LanguageManager.Tr("L_AddonRunError"), ex.Message);
         }
     }
 }

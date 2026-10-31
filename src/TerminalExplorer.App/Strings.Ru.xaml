@@ -227,6 +227,9 @@
     <sys:String x:Key="L_NotAFolder">это файл, а не папка: {0}</sys:String>
     <sys:String x:Key="L_FolderNotFound">папка не найдена: {0}</sys:String>
     <sys:String x:Key="L_StatusEditing">правка: {0}</sys:String>
+    <sys:String x:Key="L_BuiltinAddon">встроенный аддон запускается изнутри программы</sys:String>
+    <sys:String x:Key="L_AddonEntryNotFound">не найден файл запуска: {0}</sys:String>
+    <sys:String x:Key="L_AddonRunError">не удалось запустить: {0}</sys:String>
     <sys:String x:Key="L_AccessDenied">отказано в доступе: {0}</sys:String>
     <sys:String x:Key="L_ReadError">ошибка чтения: {0}</sys:String>
     <sys:String x:Key="L_OpenError">не удалось открыть: {0}</sys:String>

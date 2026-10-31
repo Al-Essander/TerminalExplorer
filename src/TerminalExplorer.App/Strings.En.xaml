@@ -228,6 +228,9 @@
     <sys:String x:Key="L_FolderNotFound">folder not found: {0}</sys:String>
     <sys:String x:Key="L_Reading">reading...</sys:String>
     <sys:String x:Key="L_StatusEditing">editing: {0}</sys:String>
+    <sys:String x:Key="L_BuiltinAddon">built-in add-on runs from inside the program</sys:String>
+    <sys:String x:Key="L_AddonEntryNotFound">launch file not found: {0}</sys:String>
+    <sys:String x:Key="L_AddonRunError">could not launch: {0}</sys:String>
     <sys:String x:Key="L_AccessDenied">access denied: {0}</sys:String>
     <sys:String x:Key="L_ReadError">read error: {0}</sys:String>
     <sys:String x:Key="L_OpenError">could not open: {0}</sys:String>
