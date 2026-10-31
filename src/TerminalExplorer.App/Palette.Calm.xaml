@@ -1,0 +1,29 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--
+        Палитра «Спокойная»: тёплые серые вместо чистого чёрного, приглушённый текст
+        вместо ярко-зелёного, терракотовый акцент. Терминальный характер сохраняется —
+        моноширинный шрифт, плоские рамки, никаких градиентов, — но контраст снижен
+        с 21:1 (чёрный/зелёный) до примерно 9:1, что комфортно для долгой работы.
+
+        Палитра меняется целиком: шаблоны ссылаются на эти ключи через DynamicResource,
+        поэтому подмена словаря перекрашивает уже открытое окно.
+    -->
+
+    <SolidColorBrush x:Key="Background" Color="#FF262624"/>
+    <SolidColorBrush x:Key="Surface" Color="#FF2F2F2C"/>
+    <SolidColorBrush x:Key="Foreground" Color="#FFC9C7C1"/>
+    <SolidColorBrush x:Key="Dim" Color="#FF817D74"/>
+    <SolidColorBrush x:Key="Selection" Color="#FF3B3A36"/>
+    <SolidColorBrush x:Key="Accent" Color="#FFD97757"/>
+    <SolidColorBrush x:Key="Border" Color="#FF45443E"/>
+    <SolidColorBrush x:Key="Hover" Color="#FF33322F"/>
+
+    <!-- Объёмная рамка в духе XP/OS2: светлая грань сверху-слева, тёмная снизу-справа. -->
+    <SolidColorBrush x:Key="BevelLight" Color="#FF4A4945"/>
+    <SolidColorBrush x:Key="BevelDark" Color="#FF1A1A18"/>
+
+    <FontFamily x:Key="MonoFont">Consolas, Courier New</FontFamily>
+
+</ResourceDictionary>

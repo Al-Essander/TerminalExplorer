@@ -1,0 +1,23 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--
+        «MS-DOS Far»: чёрная схема Far Manager — голубоватый контур на чёрном фоне, файлы бирюзовым,
+        каталоги белым, скрытые приглушённо-зелёным, полоса выделения и меню цвета морской волны.
+    -->
+
+    <SolidColorBrush x:Key="Background" Color="#FF0C0C0C"/>
+    <SolidColorBrush x:Key="Surface" Color="#FF0C0C0C"/>
+    <SolidColorBrush x:Key="Foreground" Color="#FF00D0D0"/>
+    <SolidColorBrush x:Key="Dim" Color="#FF1F8F8F"/>
+    <SolidColorBrush x:Key="Selection" Color="#FF006E6E"/>
+    <SolidColorBrush x:Key="Accent" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="Border" Color="#FF00B8B8"/>
+    <SolidColorBrush x:Key="Hover" Color="#FF0E2E2E"/>
+
+    <SolidColorBrush x:Key="BevelLight" Color="#FF00A0A0"/>
+    <SolidColorBrush x:Key="BevelDark" Color="#FF004848"/>
+
+    <FontFamily x:Key="MonoFont">Consolas, Courier New</FontFamily>
+
+</ResourceDictionary>

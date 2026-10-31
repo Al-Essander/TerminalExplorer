@@ -1,0 +1,125 @@
+<Window x:Class="TerminalExplorer.FolderTreeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="ГЕНЕРАТОР СТРУКТУРЫ ПАПОК"
+        Height="720" Width="660"
+        MinHeight="560" MinWidth="600"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource Background}"
+        UseLayoutRounding="True"
+        TextOptions.TextFormattingMode="Display"
+        WindowStyle="None">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="0" ResizeBorderThickness="5"
+                            CornerRadius="0" GlassFrameThickness="0"
+                            UseAeroCaptionButtons="False"/>
+    </shell:WindowChrome.WindowChrome>
+
+    <Border BorderBrush="{DynamicResource Border}" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Background="{DynamicResource Selection}"
+                  MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                <TextBlock Text="  ГЕНЕРАТОР СТРУКТУРЫ ПАПОК" VerticalAlignment="Center"
+                           Foreground="{DynamicResource Accent}"/>
+                <Button HorizontalAlignment="Right" Width="34" Content="X"
+                        BorderThickness="0" Click="Close_Click"/>
+            </Grid>
+
+            <!-- ШАПКА: куда создаём и как называется корень -->
+            <StackPanel Grid.Row="1" Margin="14,12,14,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="130"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Создать в" VerticalAlignment="Center"
+                               Foreground="{DynamicResource Dim}"/>
+                    <TextBlock Grid.Column="1" x:Name="TargetText" VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis"/>
+                </Grid>
+
+                <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="130"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Имя корня" VerticalAlignment="Center"
+                               Foreground="{DynamicResource Dim}"/>
+                    <TextBox Grid.Column="1" x:Name="RootNameBox" Text="rootName"
+                             TextChanged="Structure_Changed"/>
+                </Grid>
+
+                <TextBlock Margin="0,10,0,4" Foreground="{DynamicResource Dim}"
+                           Text="Дочерние папки. Вложенность до трёх уровней."/>
+            </StackPanel>
+
+            <!-- ДЕРЕВО: редактируемая структура -->
+            <Grid Grid.Row="2" Margin="14,4,14,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="230"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" BorderBrush="{DynamicResource Border}" BorderThickness="1">
+                    <TreeView x:Name="Tree" Background="{DynamicResource Background}"
+                              BorderThickness="0"
+                              SelectedItemChanged="Tree_SelectionChanged">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                <TextBlock Text="{Binding Name}" Margin="2"/>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </Border>
+
+                <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="10,0,0,0">
+                <StackPanel>
+                    <TextBlock Text="Имя папки" Foreground="{DynamicResource Dim}"/>
+                    <TextBox x:Name="NodeNameBox" Margin="0,4,0,0" KeyDown="NodeName_KeyDown"/>
+
+                    <Button Content="Добавить в выбранную" Margin="0,8,0,0" Click="AddChild_Click"/>
+                    <Button Content="Переименовать" Margin="0,4,0,0" Click="Rename_Click"/>
+                    <Button Content="Удалить" Margin="0,4,0,0" Click="Remove_Click"/>
+
+                    <TextBlock Text="Быстрое добавление" Foreground="{DynamicResource Dim}" Margin="0,14,0,4"/>
+                    <TextBox x:Name="BatchBox" Text="0-child, 1-child, 2-child"/>
+                    <Button Content="Добавить списком" Margin="0,4,0,0" Click="AddBatch_Click"/>
+                    <TextBlock Foreground="{DynamicResource Dim}" TextWrapping="Wrap" Margin="0,4,0,0"
+                               Text="Имена через запятую. Добавляются в выбранную папку одним уровнем."/>
+
+                    <TextBlock Text="Шаблоны" Foreground="{DynamicResource Dim}" Margin="0,14,0,4"/>
+                    <ComboBox x:Name="TemplateBox" SelectionChanged="Template_Changed"/>
+                    <Button Content="Сохранить как шаблон" Margin="0,4,0,0" Click="SaveTemplate_Click"/>
+                    <Button Content="Удалить шаблон" Margin="0,4,0,0" Click="DeleteTemplate_Click"/>
+                </StackPanel>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- ПРЕДПРОСМОТР -->
+            <Border Grid.Row="3" Margin="14,10,14,0" BorderBrush="{DynamicResource Border}" BorderThickness="1">
+                <ScrollViewer Height="120" VerticalScrollBarVisibility="Auto">
+                    <TextBlock x:Name="PreviewText" Margin="8" Foreground="{DynamicResource Dim}"/>
+                </ScrollViewer>
+            </Border>
+
+            <Grid Grid.Row="4" Background="{DynamicResource Selection}" Height="40" Margin="0,12,0,0">
+                <TextBlock x:Name="StatusText" Margin="12,0,0,0" VerticalAlignment="Center"
+                           Foreground="{DynamicResource Accent}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,6,10,6">
+                    <Button Content="Закрыть" Click="Close_Click"/>
+                    <Button Content="Создать" Margin="6,0,0,0" Click="Create_Click"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

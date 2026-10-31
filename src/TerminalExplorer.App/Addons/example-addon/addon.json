@@ -1,0 +1,16 @@
+{
+  "id": "example-addon",
+  "name": "Пример аддона",
+  "description": "Бланк для своих аддонов. Показывает, какие данные приходят от проводника.",
+  "author": "ваше имя",
+  "version": "1.0.0",
+
+  "kind": "executable",
+  "placement": "both",
+
+  "entry": "run.cmd",
+  "arguments": "\"{folder}\" \"{selection}\"",
+
+  "requiresFolder": true,
+  "hidden": false
+}

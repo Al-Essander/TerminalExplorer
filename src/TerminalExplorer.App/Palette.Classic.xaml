@@ -1,0 +1,29 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--
+        Палитра «Классика» — собирательный образ Win95/98, OS/2 Workplace Shell и GEOS
+        со скриншотов: тёплый светло-серый корпус, белое поле списка, тёмно-синий заголовок.
+
+        Ключевое отличие от современных светлых тем: рабочая область (список файлов) белая,
+        а панели вокруг — серые. Именно этот контраст между «бумагой» и «корпусом» и создаёт
+        узнаваемый вид, при этом глаз не устаёт, потому что нет ни чистого чёрного,
+        ни насыщенных цветов.
+    -->
+
+    <SolidColorBrush x:Key="Background" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="Surface" Color="#FFD4D0C8"/>
+    <SolidColorBrush x:Key="Foreground" Color="#FF1A1A1A"/>
+    <SolidColorBrush x:Key="Dim" Color="#FF6E6A63"/>
+    <SolidColorBrush x:Key="Selection" Color="#FF000080"/>
+    <SolidColorBrush x:Key="Accent" Color="#FF7B2D0E"/>
+    <SolidColorBrush x:Key="Border" Color="#FF9A9691"/>
+    <SolidColorBrush x:Key="Hover" Color="#FFE8E6E1"/>
+
+    <!-- Классическая объёмная рамка: белая грань сверху-слева, тёмно-серая снизу-справа. -->
+    <SolidColorBrush x:Key="BevelLight" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="BevelDark" Color="#FF6E6A63"/>
+
+    <FontFamily x:Key="MonoFont">Consolas, Courier New</FontFamily>
+
+</ResourceDictionary>

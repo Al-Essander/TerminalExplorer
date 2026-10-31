@@ -1,0 +1,13 @@
+{
+  "id": "folder-tree",
+  "name": "Генератор структуры папок",
+  "description": "Создаёт дерево папок по шаблону: корень и вложенные уровни до трёх в глубину.",
+  "author": "Terminal Explorer",
+  "version": "1.0.0",
+
+  "kind": "builtin",
+  "placement": "both",
+
+  "requiresFolder": true,
+  "pinned": true
+}

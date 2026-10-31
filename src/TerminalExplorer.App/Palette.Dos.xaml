@@ -1,0 +1,27 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--
+        «MS-DOS классика»: синий текстовый режим в духе Norton Commander и Far Manager по умолчанию —
+        синий фон, белый текст, бирюзовая полоса выделения, жёлтые заголовки и каталоги,
+        светло-голубые рамки. Цвета — из палитры VGA: 0000AA, FFFFFF, FFFF55, 55FFFF, 00AAAA.
+
+        Выделение чуть темнее чистого бирюзового 00AAAA: на нём остаётся читаемым белый текст,
+        тогда как в оригинале строку выделения набирали чёрным.
+    -->
+
+    <SolidColorBrush x:Key="Background" Color="#FF0000AA"/>
+    <SolidColorBrush x:Key="Surface" Color="#FF0000AA"/>
+    <SolidColorBrush x:Key="Foreground" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="Dim" Color="#FFAAAAAA"/>
+    <SolidColorBrush x:Key="Selection" Color="#FF008A8A"/>
+    <SolidColorBrush x:Key="Accent" Color="#FFFFFF55"/>
+    <SolidColorBrush x:Key="Border" Color="#FF55FFFF"/>
+    <SolidColorBrush x:Key="Hover" Color="#FF1A1AC8"/>
+
+    <SolidColorBrush x:Key="BevelLight" Color="#FF5555FF"/>
+    <SolidColorBrush x:Key="BevelDark" Color="#FF000077"/>
+
+    <FontFamily x:Key="MonoFont">Consolas, Courier New</FontFamily>
+
+</ResourceDictionary>
