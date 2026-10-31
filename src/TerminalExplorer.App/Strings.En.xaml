@@ -265,4 +265,6 @@
     <sys:String x:Key="L_ModeName">By name</sys:String>
     <sys:String x:Key="L_ModeContent">By code (in content)</sys:String>
     <sys:String x:Key="L_PinTab">Pin tab</sys:String>
+    <sys:String x:Key="L_FloatingPanels">Floating panels (always on top)</sys:String>
+    <sys:String x:Key="L_FloatPanel">Float panel</sys:String>
 </ResourceDictionary>

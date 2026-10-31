@@ -20,6 +20,9 @@
                                Foreground="{DynamicResource Dim}"/>
                     <TextBlock x:Name="ActivityText" Margin="6,0,0,0" VerticalAlignment="Center"
                                Foreground="{DynamicResource Dim}"/>
+                    <Button x:Name="FloatButton" Content="⧉" Width="26" Padding="0" Margin="6,0,0,0"
+                            BorderThickness="0" Foreground="{DynamicResource Accent}"
+                            ToolTip="{DynamicResource L_FloatPanel}" Click="Float_Click"/>
                 </StackPanel>
             </Grid>
 

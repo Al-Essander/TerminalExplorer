@@ -264,4 +264,6 @@
     <sys:String x:Key="L_ModeName">По имени</sys:String>
     <sys:String x:Key="L_ModeContent">По коду (в содержимом)</sys:String>
     <sys:String x:Key="L_PinTab">Закрепить вкладку</sys:String>
+    <sys:String x:Key="L_FloatingPanels">Открепляемые панели (поверх других)</sys:String>
+    <sys:String x:Key="L_FloatPanel">Открепить панель</sys:String>
 </ResourceDictionary>

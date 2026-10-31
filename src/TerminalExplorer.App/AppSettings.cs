@@ -54,6 +54,12 @@ public sealed class AppSettings
     /// <summary>Терминал и панель файлов следуют за папкой друг друга.</summary>
     public bool TerminalFollowsPanel { get; set; } = true;
 
+    /// <summary>
+    /// Панели (сведения, терминал) могут быть откреплены в отдельное всегда-поверх-окно.
+    /// Выключено по умолчанию: в режиме доков это лишний шум.
+    /// </summary>
+    public bool FloatingPanels { get; set; }
+
     // --- звук ---
     public bool SoundEnabled { get; set; } = true;
 

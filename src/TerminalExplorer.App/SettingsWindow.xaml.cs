@@ -73,6 +73,7 @@ public partial class SettingsWindow : Window
         TabPaddingSlider.Value = settings.TabPaddingHorizontal;
         SoundCheck.IsChecked = settings.SoundEnabled;
         NewTabCheck.IsChecked = settings.OpenFoldersInNewTab;
+        FloatingPanelsCheck.IsChecked = settings.FloatingPanels;
 
         PathHint.Text = SessionStore.DirectoryPath;
         UpdateSoundHint();
@@ -279,6 +280,7 @@ public partial class SettingsWindow : Window
         if (_loading) return;
 
         AppSettings.Current.OpenFoldersInNewTab = NewTabCheck.IsChecked == true;
+        AppSettings.Current.FloatingPanels = FloatingPanelsCheck.IsChecked == true;
         AppSettings.Current.Save();
     }
 

@@ -162,6 +162,9 @@
                     <CheckBox x:Name="NewTabCheck" Content="{DynamicResource L_OpenFoldersInNewTab}"
                               Foreground="{DynamicResource Foreground}"
                               Checked="Behaviour_Changed" Unchecked="Behaviour_Changed"/>
+                    <CheckBox x:Name="FloatingPanelsCheck" Content="{DynamicResource L_FloatingPanels}"
+                              Foreground="{DynamicResource Foreground}" Margin="0,6,0,0"
+                              Checked="Behaviour_Changed" Unchecked="Behaviour_Changed"/>
 
                     <TextBlock Text=" " Margin="0,0,0,10"/>
                 </StackPanel>

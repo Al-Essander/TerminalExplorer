@@ -221,6 +221,8 @@ public partial class MainWindow
 
     private void TerminalMaximize_Click(object sender, RoutedEventArgs e) => ToggleTerminalMaximized();
 
+    private void TerminalFloat_Click(object sender, RoutedEventArgs e) => FloatPanel("terminal");
+
     /// <summary>Консоль на всё окно — то же, что Ctrl+O в Far, когда панели убирают с экрана.</summary>
     private void ToggleTerminalMaximized(bool? force = null)
     {

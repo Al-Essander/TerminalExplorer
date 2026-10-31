@@ -519,6 +519,8 @@
                                         ToolTip="{DynamicResource L_RestartShell}" Click="TerminalRestart_Click"/>
                                 <Button Content="⛶" Width="26" Padding="0" BorderThickness="0"
                                         ToolTip="{DynamicResource L_MaximizeTerminal}" Click="TerminalMaximize_Click"/>
+                                <Button x:Name="TerminalFloatButton" Content="⧉" Width="26" Padding="0" BorderThickness="0"
+                                        ToolTip="{DynamicResource L_FloatPanel}" Click="TerminalFloat_Click"/>
                             </StackPanel>
                         </Grid>
 

@@ -18,6 +18,10 @@ public partial class MainWindow : Window
     private readonly ObservableCollection<TabState> _tabs = [];
     private TabState? _active;
 
+    // --- открепляемые панели («поверх других»), управляется флагом FloatingPanels ---
+    private FloatingPanelWindow? _floatingTerminal;
+    private FloatingPanelWindow? _floatingDetails;
+
     /// <summary>
     /// Отменяет предыдущую загрузку. Без этого быстрое переключение вкладок приводит
     /// к гонке: медленная папка дочитывается позже быстрой и затирает её содержимое.
@@ -46,6 +50,7 @@ public partial class MainWindow : Window
         TabBar.ItemsSource = _tabs;
         Editor.Closed += Editor_Closed;
         ThemeManager.Changed += UpdateHeaderColors;
+        Details.FloatRequested += () => FloatPanel("details");
 
         FileList.AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
 
@@ -71,6 +76,10 @@ public partial class MainWindow : Window
             LanguageManager.Apply((UiLanguage)AppSettings.Current.Language);
             Favorites.Load();
             FavoriteList.ItemsSource = Favorites.Items;
+
+            // Кнопки открепления панелей («поверх других») видны только при включённом флаге.
+            Details.SetFloatVisible(AppSettings.Current.FloatingPanels);
+            TerminalFloatButton.Visibility = AppSettings.Current.FloatingPanels ? Visibility.Visible : Visibility.Collapsed;
 
             LoadDrives();
             RefreshAddons();
@@ -637,6 +646,10 @@ public partial class MainWindow : Window
         _active = tab;
         if (switching) Sounds.Play(Sounds.TabSwitch);
 
+        // Откреплённая консоль привязана к конкретной вкладке: при переключении
+        // возвращаем её в док, иначе потерялось бы содержимое активной вкладки.
+        if (switching && _floatingTerminal is not null) DockPanel("terminal");
+
         TouchRecent(tab);
         ShowTerminalFor(tab);
         ScheduleSessionSave();
@@ -1084,6 +1097,87 @@ public partial class MainWindow : Window
 
         if (_detailsVisible) UpdateDetails();
         else Details.Release();
+    }
+
+    // ---------- открепляемые панели («поверх других») ----------
+
+    /// <summary>Открепляет панель (терминал или сведения) в отдельное всегда-поверх-окно.</summary>
+    private void FloatPanel(string which)
+    {
+        if (!AppSettings.Current.FloatingPanels) return;
+
+        if (which == "terminal")
+        {
+            if (_floatingTerminal is { } f2) { f2.Show(); return; }
+
+            var view = _active?.TermView;
+            var window = new FloatingPanelWindow(LanguageManager.Tr("L_Console"))
+            {
+                Owner = this,
+                Width = 640,
+                Height = 420,
+            };
+            window.DockRequested += () => DockPanel("terminal");
+            _floatingTerminal = window;
+
+            // Переносим дерево терминала в плавающее окно.
+            if (view is not null)
+            {
+                if (view.Parent is Border placeholder) placeholder.Child = null;
+                window.Body.Children.Add(view);
+            }
+
+            window.Show();
+        }
+        else if (which == "details")
+        {
+            if (_floatingDetails is { } f1) { f1.Show(); return; }
+
+            var window = new FloatingPanelWindow(LanguageManager.Tr("L_DetailsTitle"))
+            {
+                Owner = this,
+                Width = 380,
+                Height = 520,
+            };
+            window.DockRequested += () => DockPanel("details");
+            _floatingDetails = window;
+
+            if (!_detailsVisible) ToggleDetails();
+
+            window.Body.Children.Add(Details);
+            window.Show();
+        }
+    }
+
+    /// <summary>Возвращает откреплённую панель в док основного окна.</summary>
+    private void DockPanel(string which)
+    {
+        if (which == "terminal")
+        {
+            if (_floatingTerminal is not { } window) return;
+
+            // Возвращаем дерево терминала обратно в доковый хост.
+            if (_active?.TermView is { } view)
+            {
+                if (view.Parent is Grid body) body.Children.Remove(view);
+                TerminalHost.Child = view;
+                TerminalHost.UpdateLayout();
+            }
+
+            _floatingTerminal = null;
+            window.Close();
+        }
+        else if (which == "details")
+        {
+            if (_floatingDetails is not { } window) return;
+
+            if (Details.Parent is Grid body) body.Children.Remove(Details);
+            Grid.SetColumn(Details, 6);
+            Details.Visibility = Visibility.Visible;
+
+            _floatingDetails = null;
+            window.Close();
+        }
     }
 
     /// <summary>

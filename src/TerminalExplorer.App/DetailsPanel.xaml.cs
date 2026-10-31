@@ -541,6 +541,14 @@ public partial class DetailsPanel : UserControl
         _watcher = null;
     }
 
+    /// <summary>Сообщает главному окну, что панель просят открепить («поверх других»).</summary>
+    public event Action? FloatRequested;
+
+    private void Float_Click(object sender, RoutedEventArgs e) => FloatRequested?.Invoke();
+
+    /// <summary>Показывает/скрывает кнопку открепления в зависимости от флага настройки.</summary>
+    public void SetFloatVisible(bool visible) => FloatButton.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+
     /// <summary>Укорачивает путь с середины — конец информативнее начала.</summary>
     private static string Shorten(string path, int limit = 44)
     {
