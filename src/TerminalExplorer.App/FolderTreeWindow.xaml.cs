@@ -113,7 +113,7 @@ public partial class FolderTreeWindow : Window
 
         if (DepthOf(parent) >= MaxDepth)
         {
-            SetStatus("глубже " + MaxDepth + " уровней шаблон не создаётся");
+            SetStatus(string.Format(LanguageManager.Tr("L_TreeTooDeep"), MaxDepth));
             return;
         }
 
@@ -131,7 +131,7 @@ public partial class FolderTreeWindow : Window
 
         if (DepthOf(parent) >= MaxDepth)
         {
-            SetStatus("глубже " + MaxDepth + " уровней шаблон не создаётся");
+            SetStatus(string.Format(LanguageManager.Tr("L_TreeTooDeep"), MaxDepth));
             return;
         }
 
@@ -146,13 +146,15 @@ public partial class FolderTreeWindow : Window
             added++;
         }
 
-        SetStatus(added > 0 ? "добавлено папок: " + added : "ни одного корректного имени");
+        SetStatus(added > 0
+            ? string.Format(LanguageManager.Tr("L_AddedFolders"), added)
+            : LanguageManager.Tr("L_NoValidNames"));
         UpdatePreview();
     }
 
     private void Rename_Click(object sender, RoutedEventArgs e)
     {
-        if (SelectedNode is not { } node) { SetStatus("выберите папку в дереве"); return; }
+        if (SelectedNode is not { } node) { SetStatus(LanguageManager.Tr("L_SelectFolder")); return; }
 
         string name = NodeNameBox.Text.Trim();
         if (!ValidateName(name)) return;
@@ -163,11 +165,11 @@ public partial class FolderTreeWindow : Window
 
     private void Remove_Click(object sender, RoutedEventArgs e)
     {
-        if (SelectedNode is not { } node) { SetStatus("выберите папку в дереве"); return; }
+        if (SelectedNode is not { } node) { SetStatus(LanguageManager.Tr("L_SelectFolder")); return; }
 
         if (ReferenceEquals(node, Root))
         {
-            SetStatus("корень удалить нельзя — его можно переименовать");
+            SetStatus(LanguageManager.Tr("L_RootCantDelete"));
             return;
         }
 
@@ -207,13 +209,13 @@ public partial class FolderTreeWindow : Window
     {
         if (name.Length == 0)
         {
-            SetStatus("введите имя папки");
+            SetStatus(LanguageManager.Tr("L_EnterFolderName"));
             return false;
         }
 
         if (!IsNameValid(name))
         {
-            SetStatus("недопустимое имя: " + name);
+            SetStatus(string.Format(LanguageManager.Tr("L_InvalidName"), name));
             return false;
         }
 
@@ -286,18 +288,18 @@ public partial class FolderTreeWindow : Window
 
         if (Directory.Exists(rootPath))
         {
-            SetStatus("папка уже существует: " + Root.Name);
+            SetStatus(string.Format(LanguageManager.Tr("L_FolderExists"), Root.Name));
             return;
         }
 
         try
         {
             int created = CreateRecursive(Root, _targetFolder);
-            SetStatus("создано папок: " + created);
+            SetStatus(string.Format(LanguageManager.Tr("L_CreatedFolders"), created));
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or PathTooLongException)
         {
-            SetStatus("ошибка создания: " + ex.Message);
+            SetStatus(string.Format(LanguageManager.Tr("L_CreateError"), ex.Message));
         }
     }
 
@@ -351,14 +353,14 @@ public partial class FolderTreeWindow : Window
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            SetStatus("не удалось сохранить шаблоны");
+            SetStatus(LanguageManager.Tr("L_SaveTemplatesError"));
         }
     }
 
     private void SaveTemplate_Click(object sender, RoutedEventArgs e)
     {
         string name = Root.Name.Trim();
-        if (name.Length == 0) { SetStatus("задайте имя корня — оно станет именем шаблона"); return; }
+        if (name.Length == 0) { SetStatus(LanguageManager.Tr("L_SetRootForTemplate")); return; }
 
         var template = new FolderTemplate
         {
@@ -373,17 +375,17 @@ public partial class FolderTreeWindow : Window
 
         SaveTemplates();
         RefreshTemplateList();
-        SetStatus("шаблон сохранён: " + name);
+        SetStatus(string.Format(LanguageManager.Tr("L_TemplateSaved"), name));
     }
 
     private void DeleteTemplate_Click(object sender, RoutedEventArgs e)
     {
-        if (TemplateBox.SelectedItem is not string name) { SetStatus("выберите шаблон"); return; }
+        if (TemplateBox.SelectedItem is not string name) { SetStatus(LanguageManager.Tr("L_SelectTemplate")); return; }
 
         _templates.RemoveAll(t => string.Equals(t.Name, name, StringComparison.OrdinalIgnoreCase));
         SaveTemplates();
         RefreshTemplateList();
-        SetStatus("шаблон удалён: " + name);
+        SetStatus(string.Format(LanguageManager.Tr("L_TemplateDeleted"), name));
     }
 
     private void Template_Changed(object sender, SelectionChangedEventArgs e)
@@ -402,7 +404,7 @@ public partial class FolderTreeWindow : Window
         foreach (TemplateNode child in template.Children) Root.Children.Add(FromTemplate(child));
 
         UpdatePreview();
-        SetStatus("шаблон загружен: " + name);
+        SetStatus(string.Format(LanguageManager.Tr("L_TemplateLoaded"), name));
     }
 
     private static TemplateNode ToTemplate(TreeNode node) => new()

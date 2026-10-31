@@ -123,10 +123,9 @@ public partial class SettingsWindow : Window
         }
 
         SoundHint.Text = present.Count == 0
-            ? "Звуковых файлов нет. Положите в папку звуков файлы WAV: " + string.Join(", ", Sounds.ExpectedFiles) +
-              " — они проигрываются при переключении вкладки, закрытии вкладки, навигации и ошибке."
-            : "Найдено: " + string.Join(", ", present) +
-              (missing.Count > 0 ? "   Отсутствует: " + string.Join(", ", missing) : string.Empty);
+            ? string.Format(LanguageManager.Tr("L_SoundsNone"), string.Join(", ", Sounds.ExpectedFiles))
+            : string.Format(LanguageManager.Tr("L_SoundsFound"), string.Join(", ", present)) +
+              (missing.Count > 0 ? string.Format(LanguageManager.Tr("L_SoundsMissing"), string.Join(", ", missing)) : string.Empty);
     }
 
     // ---------- обработчики ----------

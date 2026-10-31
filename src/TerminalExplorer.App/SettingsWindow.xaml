@@ -41,7 +41,7 @@
 
             <Grid Grid.Row="0" Background="{DynamicResource Selection}"
                   MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
-                <TextBlock Text="  НАСТРОЙКИ" VerticalAlignment="Center"
+                <TextBlock Text="{DynamicResource L_SettingsTitle}" VerticalAlignment="Center"
                            Foreground="{DynamicResource Accent}"/>
                 <Button HorizontalAlignment="Right" Width="34" Content="X"
                         BorderThickness="0" Click="Close_Click"/>
@@ -54,19 +54,19 @@
                     <ComboBox x:Name="LanguageBox" Width="200" HorizontalAlignment="Left"
                               SelectionChanged="Language_Changed"/>
 
-                    <TextBlock Text="ТЕМА" Style="{StaticResource SectionTitle}"/>
+                    <TextBlock Text="{DynamicResource L_Theme}" Style="{StaticResource SectionTitle}"/>
                     <WrapPanel>
-                        <Button x:Name="ThemeCalm" Content="Спокойная" Click="Theme_Click" Tag="0"/>
-                        <Button x:Name="ThemeDos" Content="DOS синий" Margin="4,0,0,0" Click="Theme_Click" Tag="1"/>
-                        <Button x:Name="ThemeDosFar" Content="DOS Far" Margin="4,0,0,0" Click="Theme_Click" Tag="2"/>
-                        <Button x:Name="ThemeClassic" Content="Классика" Margin="4,0,0,0" Click="Theme_Click" Tag="3"/>
-                        <Button x:Name="ThemeCustom" Content="Своя" Margin="4,0,0,0" Click="Theme_Click" Tag="4"/>
+                        <Button x:Name="ThemeCalm" Content="{DynamicResource L_ThemeCalm}" Click="Theme_Click" Tag="0"/>
+                        <Button x:Name="ThemeDos" Content="{DynamicResource L_ThemeDos}" Margin="4,0,0,0" Click="Theme_Click" Tag="1"/>
+                        <Button x:Name="ThemeDosFar" Content="{DynamicResource L_ThemeDosFar}" Margin="4,0,0,0" Click="Theme_Click" Tag="2"/>
+                        <Button x:Name="ThemeClassic" Content="{DynamicResource L_ThemeClassic}" Margin="4,0,0,0" Click="Theme_Click" Tag="3"/>
+                        <Button x:Name="ThemeCustom" Content="{DynamicResource L_ThemeCustom}" Margin="4,0,0,0" Click="Theme_Click" Tag="4"/>
                     </WrapPanel>
-                    <TextBlock Text="F9 переключает тему прямо в окне проводника"
+                    <TextBlock Text="{DynamicResource L_ThemeF9}"
                                Foreground="{DynamicResource Dim}" Margin="0,6,0,0"/>
 
-                    <TextBlock Text="ЦВЕТА (своя тема)" Style="{StaticResource SectionTitle}"/>
-                    <TextBlock Text="Формат #RRGGBB или #AARRGGBB. Изменения применяются сразу."
+                    <TextBlock Text="{DynamicResource L_ColorsTitle}" Style="{StaticResource SectionTitle}"/>
+                    <TextBlock Text="{DynamicResource L_ColorsHint}"
                                Foreground="{DynamicResource Dim}" Margin="0,0,0,8"/>
                     <ItemsControl x:Name="ColorList">
                         <ItemsControl.ItemTemplate>
@@ -85,23 +85,23 @@
                                     <!-- Образец кликабелен: открывает HSV-палитру для этого цвета. -->
                                     <Button Grid.Column="2" Margin="6,0,0,0" Padding="0"
                                             Tag="{Binding}" Click="PickColor_Click"
-                                            ToolTip="Выбрать цвет">
+                                            ToolTip="{DynamicResource L_PickColor}">
                                         <Rectangle Width="22" Height="14" Fill="{Binding Preview}"/>
                                     </Button>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                    <Button Content="Скопировать цвета из текущей темы" Margin="0,6,0,0"
+                    <Button Content="{DynamicResource L_SeedColors}" Margin="0,6,0,0"
                             HorizontalAlignment="Left" Click="SeedColors_Click"/>
 
-                    <TextBlock Text="ШРИФТ" Style="{StaticResource SectionTitle}"/>
+                    <TextBlock Text="{DynamicResource L_FontSection}" Style="{StaticResource SectionTitle}"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Размер" Style="{StaticResource FieldLabel}"/>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource L_FontSize}" Style="{StaticResource FieldLabel}"/>
                         <Slider Grid.Column="1" x:Name="FontSizeSlider" Minimum="6" Maximum="40"
                                 TickFrequency="1" IsSnapToTickEnabled="True"
                                 ValueChanged="FontSize_Changed"/>
@@ -111,17 +111,17 @@
                             <ColumnDefinition Width="150"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Семейство" Style="{StaticResource FieldLabel}"/>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource L_FontFamily}" Style="{StaticResource FieldLabel}"/>
                         <TextBox Grid.Column="1" x:Name="FontFamilyBox" TextChanged="FontFamily_Changed"/>
                     </Grid>
 
-                    <TextBlock Text="ВКЛАДКИ" Style="{StaticResource SectionTitle}"/>
+                    <TextBlock Text="{DynamicResource L_TabsSection}" Style="{StaticResource SectionTitle}"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Высота" Style="{StaticResource FieldLabel}"/>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource L_TabHeight}" Style="{StaticResource FieldLabel}"/>
                         <Slider Grid.Column="1" x:Name="TabHeightSlider" Minimum="16" Maximum="80"
                                 TickFrequency="1" IsSnapToTickEnabled="True"
                                 ValueChanged="TabHeight_Changed"/>
@@ -131,7 +131,7 @@
                             <ColumnDefinition Width="150"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Макс. ширина" Style="{StaticResource FieldLabel}"/>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource L_TabMaxWidth}" Style="{StaticResource FieldLabel}"/>
                         <Slider Grid.Column="1" x:Name="TabWidthSlider" Minimum="40" Maximum="600"
                                 TickFrequency="10" IsSnapToTickEnabled="True"
                                 ValueChanged="TabWidth_Changed"/>
@@ -141,25 +141,25 @@
                             <ColumnDefinition Width="150"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Отступы" Style="{StaticResource FieldLabel}"/>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource L_TabPadding}" Style="{StaticResource FieldLabel}"/>
                         <Slider Grid.Column="1" x:Name="TabPaddingSlider" Minimum="0" Maximum="60"
                                 TickFrequency="1" IsSnapToTickEnabled="True"
                                 ValueChanged="TabPadding_Changed"/>
                     </Grid>
 
-                    <TextBlock Text="ЗВУК" Style="{StaticResource SectionTitle}"/>
-                    <CheckBox x:Name="SoundCheck" Content="Звуки интерфейса"
+                    <TextBlock Text="{DynamicResource L_SoundSection}" Style="{StaticResource SectionTitle}"/>
+                    <CheckBox x:Name="SoundCheck" Content="{DynamicResource L_SoundEnabled}"
                               Foreground="{DynamicResource Foreground}"
                               Checked="Sound_Changed" Unchecked="Sound_Changed"/>
                     <TextBlock x:Name="SoundHint" Foreground="{DynamicResource Dim}"
                                TextWrapping="Wrap" Margin="0,6,0,0"/>
                     <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
-                        <Button Content="Открыть папку звуков" Click="OpenSounds_Click"/>
-                        <Button Content="Перечитать" Margin="4,0,0,0" Click="ReloadSounds_Click"/>
+                        <Button Content="{DynamicResource L_OpenSoundsFolder}" Click="OpenSounds_Click"/>
+                        <Button Content="{DynamicResource L_ReloadSounds}" Margin="4,0,0,0" Click="ReloadSounds_Click"/>
                     </StackPanel>
 
-                    <TextBlock Text="ПОВЕДЕНИЕ" Style="{StaticResource SectionTitle}"/>
-                    <CheckBox x:Name="NewTabCheck" Content="Открывать папки в новой вкладке"
+                    <TextBlock Text="{DynamicResource L_BehaviourSection}" Style="{StaticResource SectionTitle}"/>
+                    <CheckBox x:Name="NewTabCheck" Content="{DynamicResource L_OpenFoldersInNewTab}"
                               Foreground="{DynamicResource Foreground}"
                               Checked="Behaviour_Changed" Unchecked="Behaviour_Changed"/>
 
@@ -170,7 +170,7 @@
             <Grid Grid.Row="2" Background="{DynamicResource Selection}" Height="34">
                 <TextBlock x:Name="PathHint" Margin="10,0,0,0" VerticalAlignment="Center"
                            Foreground="{DynamicResource Dim}"/>
-                <Button Content="Готово" HorizontalAlignment="Right" Margin="0,4,8,4"
+                <Button Content="{DynamicResource L_Done}" HorizontalAlignment="Right" Margin="0,4,8,4"
                         Click="Close_Click"/>
             </Grid>
         </Grid>

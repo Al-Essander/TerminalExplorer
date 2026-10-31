@@ -45,34 +45,35 @@ public partial class BloomPanel : UserControl
 
         if (string.IsNullOrWhiteSpace(_query))
         {
-            HeaderText.Text = "КАК РАБОТАЕТ ФИЛЬТР БЛУМА";
-            VisualHost.Children.Add(Label("Введите запрос — панель покажет, как имя отсеивается сигнатурой."));
+            HeaderText.Text = LanguageManager.Tr("L_BloomTitle");
+            VisualHost.Children.Add(Label(LanguageManager.Tr("L_BloomEmpty")));
             return;
         }
 
-        HeaderText.Text = "ФИЛЬТР БЛУМА · запрос \"" + _query + "\" · найдено " + _matchCount;
+        HeaderText.Text = string.Format(
+            LanguageManager.Tr("L_BloomHeader"), _query, _matchCount);
 
         // 1. Запрос
-        VisualHost.Children.Add(StepHeading("1. Запрос"));
+        VisualHost.Children.Add(StepHeading(LanguageManager.Tr("L_BloomStep1")));
         VisualHost.Children.Add(Block(_query));
 
         // 2. n-граммы
         var ngrams = BuildNgrams(_query);
-        VisualHost.Children.Add(StepHeading("2. Разбивка на биграммы"));
+        VisualHost.Children.Add(StepHeading(LanguageManager.Tr("L_BloomStep2")));
         VisualHost.Children.Add(ChipsRow(ngrams));
 
         // 3. Хеш каждой n-граммы → номер бита
         var bitIndices = ngrams.Select(NgramBitAt).ToArray();
-        VisualHost.Children.Add(StepHeading("3. Хеш (FNV-1a) → бит маски"));
+        VisualHost.Children.Add(StepHeading(LanguageManager.Tr("L_BloomStep3")));
         VisualHost.Children.Add(BitLabelsRow(ngrams, bitIndices));
 
         // 4. Маска запроса (64 бита)
         ulong mask = Mask(bitIndices);
-        VisualHost.Children.Add(StepHeading("4. Маска запроса — установленные биты"));
+        VisualHost.Children.Add(StepHeading(LanguageManager.Tr("L_BloomStep4")));
         VisualHost.Children.Add(BitRow(mask, mask));
 
         // 5. Имена-кандидаты
-        VisualHost.Children.Add(StepHeading("5. Проверка имён: биты сигнатуры AND маска"));
+        VisualHost.Children.Add(StepHeading(LanguageManager.Tr("L_BloomStep5")));
         foreach (string name in DemoNames())
             VisualHost.Children.Add(ExampleBlock(name, mask));
     }
@@ -282,8 +283,8 @@ public partial class BloomPanel : UserControl
         });
 
         string verdict = passes
-            ? (contains ? "      AND: прошло совпадение" : "      AND: прошло (ложноположительное)")
-            : "      AND: отсеяно";
+            ? (contains ? LanguageManager.Tr("L_BloomAndPass") : LanguageManager.Tr("L_BloomAndFalse"))
+            : LanguageManager.Tr("L_BloomAndRejected");
         container.Children.Add(new TextBlock
         {
             Text = verdict,

@@ -30,6 +30,35 @@
     <sys:String x:Key="L_Language">ЯЗЫК</sys:String>
     <sys:String x:Key="L_LangRussian">Русский</sys:String>
     <sys:String x:Key="L_LangEnglish">English</sys:String>
+    <sys:String x:Key="L_Theme">ТЕМА</sys:String>
+    <sys:String x:Key="L_ThemeCalm">Спокойная</sys:String>
+    <sys:String x:Key="L_ThemeDos">DOS синий</sys:String>
+    <sys:String x:Key="L_ThemeDosFar">DOS Far</sys:String>
+    <sys:String x:Key="L_ThemeClassic">Классика</sys:String>
+    <sys:String x:Key="L_ThemeCustom">Своя</sys:String>
+    <sys:String x:Key="L_ThemeF9">F9 переключает тему прямо в окне проводника</sys:String>
+    <sys:String x:Key="L_ColorsTitle">ЦВЕТА (своя тема)</sys:String>
+    <sys:String x:Key="L_ColorsHint">Формат #RRGGBB или #AARRGGBB. Изменения применяются сразу.</sys:String>
+    <sys:String x:Key="L_PickColor">Выбрать цвет</sys:String>
+    <sys:String x:Key="L_SeedColors">Скопировать цвета из текущей темы</sys:String>
+    <sys:String x:Key="L_FontSection">ШРИФТ</sys:String>
+    <sys:String x:Key="L_FontSize">Размер</sys:String>
+    <sys:String x:Key="L_FontFamily">Семейство</sys:String>
+    <sys:String x:Key="L_TabsSection">ВКЛАДКИ</sys:String>
+    <sys:String x:Key="L_TabHeight">Высота</sys:String>
+    <sys:String x:Key="L_TabMaxWidth">Макс. ширина</sys:String>
+    <sys:String x:Key="L_TabPadding">Отступы</sys:String>
+    <sys:String x:Key="L_SoundSection">ЗВУК</sys:String>
+    <sys:String x:Key="L_SoundEnabled">Звуки интерфейса</sys:String>
+    <sys:String x:Key="L_OpenSoundsFolder">Открыть папку звуков</sys:String>
+    <sys:String x:Key="L_ReloadSounds">Перечитать</sys:String>
+    <sys:String x:Key="L_BehaviourSection">ПОВЕДЕНИЕ</sys:String>
+    <sys:String x:Key="L_OpenFoldersInNewTab">Открывать папки в новой вкладке</sys:String>
+    <sys:String x:Key="L_SettingsTitle">НАСТРОЙКИ</sys:String>
+    <sys:String x:Key="L_Done">Готово</sys:String>
+    <sys:String x:Key="L_SoundsNone">Звуковых файлов нет. Положите в папку звуков файлы WAV: {0} — они проигрываются при переключении вкладки, закрытии вкладки, навигации и ошибке.</sys:String>
+    <sys:String x:Key="L_SoundsFound">Найдено: {0}</sys:String>
+    <sys:String x:Key="L_SoundsMissing">   Отсутствует: {0}</sys:String>
 
     <!-- Правая панель -->
     <sys:String x:Key="L_Console">КОНСОЛЬ</sys:String>
@@ -94,4 +123,95 @@
     <sys:String x:Key="L_Found">найдено</sys:String>
     <sys:String x:Key="L_SearchError">ошибка поиска</sys:String>
     <sys:String x:Key="L_Close">Закрыть</sys:String>
+
+    <!-- Панель фильтра Блума -->
+    <sys:String x:Key="L_BloomTitle">КАК РАБОТАЕТ ФИЛЬТР БЛУМА</sys:String>
+    <sys:String x:Key="L_BloomEmpty">Введите запрос — панель покажет, как имя отсеивается сигнатурой.</sys:String>
+    <sys:String x:Key="L_BloomHeader">ФИЛЬТР БЛУМА · запрос "{0}" · найдено {1}</sys:String>
+    <sys:String x:Key="L_BloomStep1">1. Запрос</sys:String>
+    <sys:String x:Key="L_BloomStep2">2. Разбивка на биграммы</sys:String>
+    <sys:String x:Key="L_BloomStep3">3. Хеш (FNV-1a) → бит маски</sys:String>
+    <sys:String x:Key="L_BloomStep4">4. Маска запроса — установленные биты</sys:String>
+    <sys:String x:Key="L_BloomStep5">5. Проверка имён: биты сигнатуры AND маска</sys:String>
+    <sys:String x:Key="L_BloomAndPass">      AND: прошло совпадение</sys:String>
+    <sys:String x:Key="L_BloomAndFalse">      AND: прошло (ложноположительное)</sys:String>
+    <sys:String x:Key="L_BloomAndRejected">      AND: отсеяно</sys:String>
+<!-- Переименование -->
+    <sys:String x:Key="L_RenameTitle">ПЕРЕИМЕНОВАТЬ</sys:String>
+    <sys:String x:Key="L_RenameFolder">ПЕРЕИМЕНОВАТЬ ПАПКУ</sys:String>
+    <sys:String x:Key="L_RenameFile">ПЕРЕИМЕНОВАТЬ ФАЙЛ</sys:String>
+    <sys:String x:Key="L_Cancel">Отмена</sys:String>
+    <sys:String x:Key="L_Rename">Переименовать</sys:String>
+    <sys:String x:Key="L_NameEmpty">имя не может быть пустым</sys:String>
+    <sys:String x:Key="L_NameInvalidChars">недопустимые символы: \ / : * ? &quot; &lt; &gt; |</sys:String>
+    <sys:String x:Key="L_NameInvalid">недопустимое имя</sys:String>
+    <sys:String x:Key="L_NameEndsWith">имя не может заканчиваться точкой или пробелом</sys:String>
+    <sys:String x:Key="L_NameReserved">имя {0} зарезервировано системой</sys:String>
+
+    <!-- Окно выбора цвета -->
+    <sys:String x:Key="L_PickColorTitle">ЦВЕТ</sys:String>
+    <sys:String x:Key="L_Hue">ТОН</sys:String>
+    <sys:String x:Key="L_Hex">HEX</sys:String>
+    <sys:String x:Key="L_Choose">Выбрать</sys:String>
+<!-- Генератор структуры папок -->
+    <sys:String x:Key="L_FolderTreeTitle">ГЕНЕРАТОР СТРУКТУРЫ ПАПОК</sys:String>
+    <sys:String x:Key="L_CreateIn">Создать в</sys:String>
+    <sys:String x:Key="L_RootName">Имя корня</sys:String>
+    <sys:String x:Key="L_FolderTreeHint">Дочерние папки. Вложенность до трёх уровней.</sys:String>
+    <sys:String x:Key="L_FolderName">Имя папки</sys:String>
+    <sys:String x:Key="L_AddToSelected">Добавить в выбранную</sys:String>
+    <sys:String x:Key="L_QuickAdd">Быстрое добавление</sys:String>
+    <sys:String x:Key="L_AddByList">Добавить списком</sys:String>
+    <sys:String x:Key="L_AddByListHint">Имена через запятую. Добавляются в выбранную папку одним уровнем.</sys:String>
+    <sys:String x:Key="L_Templates">Шаблоны</sys:String>
+    <sys:String x:Key="L_SaveTemplate">Сохранить как шаблон</sys:String>
+    <sys:String x:Key="L_DeleteTemplate">Удалить шаблон</sys:String>
+    <sys:String x:Key="L_Create">Создать</sys:String>
+    <sys:String x:Key="L_TreeTooDeep">глубже {0} уровней шаблон не создаётся</sys:String>
+    <sys:String x:Key="L_AddedFolders">добавлено папок: {0}</sys:String>
+    <sys:String x:Key="L_NoValidNames">ни одного корректного имени</sys:String>
+    <sys:String x:Key="L_SelectFolder">выберите папку в дереве</sys:String>
+    <sys:String x:Key="L_RootCantDelete">корень удалить нельзя — его можно переименовать</sys:String>
+    <sys:String x:Key="L_EnterFolderName">введите имя папки</sys:String>
+    <sys:String x:Key="L_InvalidName">недопустимое имя: {0}</sys:String>
+    <sys:String x:Key="L_FolderExists">папка уже существует: {0}</sys:String>
+    <sys:String x:Key="L_CreatedFolders">создано папок: {0}</sys:String>
+    <sys:String x:Key="L_CreateError">ошибка создания: {0}</sys:String>
+    <sys:String x:Key="L_SaveTemplatesError">не удалось сохранить шаблоны</sys:String>
+    <sys:String x:Key="L_SetRootForTemplate">задайте имя корня — оно станет именем шаблона</sys:String>
+    <sys:String x:Key="L_TemplateSaved">шаблон сохранён: {0}</sys:String>
+    <sys:String x:Key="L_SelectTemplate">выберите шаблон</sys:String>
+    <sys:String x:Key="L_TemplateDeleted">шаблон удалён: {0}</sys:String>
+    <sys:String x:Key="L_TemplateLoaded">шаблон загружен: {0}</sys:String>
+
+    <!-- Панель сведений -->
+    <sys:String x:Key="L_DetailsTitle">СВЕДЕНИЯ</sys:String>
+    <sys:String x:Key="L_Structure">СТРУКТУРА</sys:String>
+    <sys:String x:Key="L_WhatTakesSpace">ЧТО ЗАНИМАЕТ МЕСТО</sys:String>
+    <sys:String x:Key="L_SizeDistribution">РАСПРЕДЕЛЕНИЕ РАЗМЕРОВ</sys:String>
+    <sys:String x:Key="L_BenfordTitle">ПЕРВЫЕ ЦИФРЫ РАЗМЕРОВ</sys:String>
+    <sys:String x:Key="L_WhatItCost">ЧЕГО ЭТО СТОИЛО</sys:String>
+    <sys:String x:Key="L_OpenInBlender">Открыть в Blender</sys:String>
+    <sys:String x:Key="L_BlenderBroken">Не удалось прочитать заголовок — файл повреждён или это не .blend.</sys:String>
+    <sys:String x:Key="L_NothingSelected">ничего не выбрано</sys:String>
+    <sys:String x:Key="L_ObjectFolder">&lt;ПАПКА&gt;</sys:String>
+    <sys:String x:Key="L_Walking">обход...</sys:String>
+    <sys:String x:Key="L_NoFiles">нет файлов</sys:String>
+    <sys:String x:Key="L_TooFewBenford">слишком мало файлов для проверки</sys:String>
+    <sys:String x:Key="L_AnalysisAborted">Обход прерван — цифры неполные.</sys:String>
+
+    <!-- Встроенный редактор -->
+    <sys:String x:Key="L_EditClose">Закрыть (Esc)</sys:String>
+    <sys:String x:Key="L_FindLabel">Найти: </sys:String>
+    <sys:String x:Key="L_FindHint">  Enter — дальше, Esc — скрыть</sys:String>
+    <sys:String x:Key="L_FileNotFound">файл не найден</sys:String>
+    <sys:String x:Key="L_FileTooBig">файл больше 6 МБ — для такого лучше настоящий редактор</sys:String>
+    <sys:String x:Key="L_BinaryFile">двоичный файл — правка текста не имеет смысла</sys:String>
+    <sys:String x:Key="L_ReadOnly">файл только для чтения</sys:String>
+    <sys:String x:Key="L_Saved">сохранено</sys:String>
+    <sys:String x:Key="L_SaveError">не удалось сохранить: {0}</sys:String>
+    <sys:String x:Key="L_UnsavedWarning">есть несохранённое: Ctrl+S — сохранить, Shift+Esc — закрыть без сохранения</sys:String>
+    <sys:String x:Key="L_ReadOnlySuffix">  [только чтение]</sys:String>
+    <sys:String x:Key="L_EditorStatus">Стр {0}  Кол {1}   |   Ctrl+S сохранить   Ctrl+F найти   Esc закрыть</sys:String>
+    <sys:String x:Key="L_NotFound">не найдено: {0}</sys:String>
 </ResourceDictionary>

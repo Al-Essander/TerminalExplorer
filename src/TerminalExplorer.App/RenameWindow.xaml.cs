@@ -17,7 +17,7 @@ public partial class RenameWindow : Window
 
         _original = currentName;
 
-        TitleText.Text = isDirectory ? "  ПЕРЕИМЕНОВАТЬ ПАПКУ" : "  ПЕРЕИМЕНОВАТЬ ФАЙЛ";
+        TitleText.Text = isDirectory ? LanguageManager.Tr("L_RenameFolder") : LanguageManager.Tr("L_RenameFile");
         HintText.Text = currentName;
         NameBox.Text = currentName;
 
@@ -74,20 +74,20 @@ public partial class RenameWindow : Window
     {
         problem = null;
 
-        if (name.Length == 0) { problem = "имя не может быть пустым"; return false; }
+        if (name.Length == 0) { problem = LanguageManager.Tr("L_NameEmpty"); return false; }
         if (name == _original) { problem = null; return true; }
 
         if (name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
         {
-            problem = "недопустимые символы: \\ / : * ? \" < > |";
+            problem = LanguageManager.Tr("L_NameInvalidChars");
             return false;
         }
 
-        if (name is "." or "..") { problem = "недопустимое имя"; return false; }
+        if (name is "." or "..") { problem = LanguageManager.Tr("L_NameInvalid"); return false; }
 
         if (name.EndsWith(' ') || name.EndsWith('.'))
         {
-            problem = "имя не может заканчиваться точкой или пробелом";
+            problem = LanguageManager.Tr("L_NameEndsWith");
             return false;
         }
 
@@ -101,7 +101,7 @@ public partial class RenameWindow : Window
 
         if (reserved.Contains(bare))
         {
-            problem = "имя " + bare + " зарезервировано системой";
+            problem = string.Format(LanguageManager.Tr("L_NameReserved"), bare);
             return false;
         }
 

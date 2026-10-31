@@ -52,7 +52,7 @@ public partial class DetailsPanel : UserControl
     {
         StopAnalysis();
 
-        ObjectName.Text = "ничего не выбрано";
+        ObjectName.Text = LanguageManager.Tr("L_NothingSelected");
         ObjectKind.Text = string.Empty;
         ObjectFacts.Text = string.Empty;
         ObjectIcon.Source = null;
@@ -113,11 +113,11 @@ public partial class DetailsPanel : UserControl
 
         ObjectIcon.Source = IconProvider.GetForPath(path, isDirectory: true);
         ObjectName.Text = displayName;
-        ObjectKind.Text = "<ПАПКА>";
-        ObjectFacts.Text = "Путь: " + path;
+        ObjectKind.Text = LanguageManager.Tr("L_ObjectFolder");
+        ObjectFacts.Text = string.Format(LanguageManager.Tr("L_ObjectPath"), path);
         HideBlender();
 
-        TreeText.Text = "обход...";
+        TreeText.Text = LanguageManager.Tr("L_Walking");
         CostText.Text = string.Empty;
 
         WatchFolder(path);
@@ -376,7 +376,7 @@ public partial class DetailsPanel : UserControl
         int peak = analysis.SizeHistogram.Max();
         if (peak == 0)
         {
-            HistogramText.Text = "нет файлов";
+            HistogramText.Text = LanguageManager.Tr("L_NoFiles");
             HistogramNote.Text = string.Empty;
             return;
         }
@@ -420,7 +420,7 @@ public partial class DetailsPanel : UserControl
 
         if (total < 30)
         {
-            BenfordText.Text = "слишком мало файлов для проверки";
+            BenfordText.Text = LanguageManager.Tr("L_TooFewBenford");
             BenfordNote.Text = string.Empty;
             return;
         }
@@ -477,7 +477,7 @@ public partial class DetailsPanel : UserControl
             "O(log k) по числу записей в каталоге. Итоговая оценка: O(N + D·log k), " +
             "где D — число каталогов." +
 
-            (analysis.Completed ? string.Empty : "\n\nОбход прерван — цифры неполные.");
+            (analysis.Completed ? string.Empty : "\n\n" + LanguageManager.Tr("L_AnalysisAborted"));
     }
 
     // ---------- живая активность ----------

@@ -72,7 +72,7 @@ public sealed class TempleEditor : Border
             Foreground = Brush(Red),
             FontWeight = FontWeights.Bold,
             Cursor = Cursors.Hand,
-            ToolTip = "Закрыть (Esc)",
+            ToolTip = LanguageManager.Tr("L_EditClose"),
         };
 
         closeButton.MouseLeftButtonDown += (_, e) => { TryClose(); e.Handled = true; };
@@ -92,7 +92,7 @@ public sealed class TempleEditor : Border
         // Панель поиска.
         var findLabel = new TextBlock
         {
-            Text = "Найти: ", Foreground = Brush(Yellow), VerticalAlignment = VerticalAlignment.Center,
+            Text = LanguageManager.Tr("L_FindLabel"), Foreground = Brush(Yellow), VerticalAlignment = VerticalAlignment.Center,
         };
 
         StyleBox(_find, Cyan, Blue);
@@ -104,7 +104,7 @@ public sealed class TempleEditor : Border
         findRow.Children.Add(_find);
         findRow.Children.Add(new TextBlock
         {
-            Text = "  Enter — дальше, Esc — скрыть", Foreground = Brush(LightBlue), VerticalAlignment = VerticalAlignment.Center,
+            Text = LanguageManager.Tr("L_FindHint"), Foreground = Brush(LightBlue), VerticalAlignment = VerticalAlignment.Center,
         });
 
         _findBar.Child = findRow;
@@ -188,8 +188,8 @@ public sealed class TempleEditor : Border
         {
             var info = new FileInfo(path);
 
-            if (!info.Exists) { message = "файл не найден"; return false; }
-            if (info.Length > MaxBytes) { message = "файл больше 6 МБ — для такого лучше настоящий редактор"; return false; }
+            if (!info.Exists) { message = LanguageManager.Tr("L_FileNotFound"); return false; }
+            if (info.Length > MaxBytes) { message = LanguageManager.Tr("L_FileTooBig"); return false; }
 
             byte[] bytes = File.ReadAllBytes(path);
 
@@ -202,7 +202,7 @@ public sealed class TempleEditor : Border
             {
                 if (b == 0 && !isUtf16Bom)
                 {
-                    message = "двоичный файл — правка текста не имеет смысла";
+                    message = LanguageManager.Tr("L_BinaryFile");
                     return false;
                 }
             }
@@ -247,7 +247,7 @@ public sealed class TempleEditor : Border
 
         if (_readOnly)
         {
-            _status.Text = "файл только для чтения";
+            _status.Text = LanguageManager.Tr("L_ReadOnly");
             return false;
         }
 
@@ -263,12 +263,12 @@ public sealed class TempleEditor : Border
 
             _dirty = false;
             UpdateTitle();
-            _status.Text = "сохранено";
+            _status.Text = LanguageManager.Tr("L_Saved");
             return true;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            _status.Text = "не удалось сохранить: " + ex.Message;
+            _status.Text = string.Format(LanguageManager.Tr("L_SaveError"), ex.Message);
             return false;
         }
     }
@@ -278,7 +278,7 @@ public sealed class TempleEditor : Border
     {
         if (_dirty && !discard)
         {
-            _status.Text = "есть несохранённое: Ctrl+S — сохранить, Shift+Esc — закрыть без сохранения";
+            _status.Text = LanguageManager.Tr("L_UnsavedWarning");
             return false;
         }
 
@@ -306,7 +306,7 @@ public sealed class TempleEditor : Border
     }
 
     private void UpdateTitle() =>
-        _title.Text = (_dirty ? "* " : "") + (_path is null ? "" : _path) + (_readOnly ? "  [только чтение]" : "");
+        _title.Text = (_dirty ? "* " : "") + (_path is null ? "" : _path) + (_readOnly ? LanguageManager.Tr("L_ReadOnlySuffix") : "");
 
     private void UpdateStatus()
     {
@@ -314,7 +314,7 @@ public sealed class TempleEditor : Border
         int line = _editor.GetLineIndexFromCharacterIndex(index);
         int column = index - Math.Max(0, _editor.GetCharacterIndexFromLineIndex(Math.Max(0, line)));
 
-        _status.Text = $"Стр {line + 1}  Кол {column + 1}   |   Ctrl+S сохранить   Ctrl+F найти   Esc закрыть";
+        _status.Text = string.Format(LanguageManager.Tr("L_EditorStatus"), line + 1, column + 1);
     }
 
     private void EditorKeyDown(object sender, KeyEventArgs e)
@@ -405,7 +405,7 @@ public sealed class TempleEditor : Border
 
         if (found < 0)
         {
-            _status.Text = "не найдено: " + needle;
+            _status.Text = string.Format(LanguageManager.Tr("L_NotFound"), needle);
             return;
         }
 

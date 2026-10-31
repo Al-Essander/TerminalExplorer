@@ -11,7 +11,7 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0" Background="{DynamicResource Surface}" Height="24">
-                <TextBlock Text=" СВЕДЕНИЯ" VerticalAlignment="Center"
+                <TextBlock Text="{DynamicResource L_DetailsTitle}" VerticalAlignment="Center"
                            Foreground="{DynamicResource Accent}"/>
 
                 <!-- Индикатор обращений файловой системы: мигает на каждое событие. -->
@@ -56,18 +56,18 @@
                         <TextBlock x:Name="BlenderNote" Foreground="{DynamicResource Dim}"
                                    TextWrapping="Wrap" Margin="0,8,0,0"/>
 
-                        <Button x:Name="OpenInBlender" Content="Открыть в Blender"
+                        <Button x:Name="OpenInBlender" Content="{DynamicResource L_OpenInBlender}"
                                 HorizontalAlignment="Left" Margin="0,10,0,0"
                                 Click="OpenInBlender_Click"/>
                     </StackPanel>
 
                     <!-- ДЕРЕВО -->
-                    <TextBlock Text="СТРУКТУРА" Foreground="{DynamicResource Accent}" Margin="0,16,0,4"/>
+                    <TextBlock Text="{DynamicResource L_Structure}" Foreground="{DynamicResource Accent}" Margin="0,16,0,4"/>
                     <TextBlock x:Name="TreeText" FontFamily="{DynamicResource MonoFont}"
                                Foreground="{DynamicResource Foreground}"/>
 
                     <!-- КАРТА ЗАНЯТОСТИ -->
-                    <TextBlock Text="ЧТО ЗАНИМАЕТ МЕСТО" Foreground="{DynamicResource Accent}" Margin="0,16,0,4"/>
+                    <TextBlock Text="{DynamicResource L_WhatTakesSpace}" Foreground="{DynamicResource Accent}" Margin="0,16,0,4"/>
                     <ItemsControl x:Name="TypeMap">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
@@ -91,21 +91,21 @@
                     </ItemsControl>
 
                     <!-- РАСПРЕДЕЛЕНИЕ РАЗМЕРОВ -->
-                    <TextBlock Text="РАСПРЕДЕЛЕНИЕ РАЗМЕРОВ" Foreground="{DynamicResource Accent}" Margin="0,16,0,4"/>
+                    <TextBlock Text="{DynamicResource L_SizeDistribution}" Foreground="{DynamicResource Accent}" Margin="0,16,0,4"/>
                     <TextBlock x:Name="HistogramText" FontFamily="{DynamicResource MonoFont}"
                                Foreground="{DynamicResource Foreground}"/>
                     <TextBlock x:Name="HistogramNote" Foreground="{DynamicResource Dim}"
                                TextWrapping="Wrap" Margin="0,4,0,0"/>
 
                     <!-- ЗАКОН БЕНФОРДА -->
-                    <TextBlock Text="ПЕРВЫЕ ЦИФРЫ РАЗМЕРОВ" Foreground="{DynamicResource Accent}" Margin="0,16,0,4"/>
+                    <TextBlock Text="{DynamicResource L_BenfordTitle}" Foreground="{DynamicResource Accent}" Margin="0,16,0,4"/>
                     <TextBlock x:Name="BenfordText" FontFamily="{DynamicResource MonoFont}"
                                Foreground="{DynamicResource Foreground}"/>
                     <TextBlock x:Name="BenfordNote" Foreground="{DynamicResource Dim}"
                                TextWrapping="Wrap" Margin="0,4,0,0"/>
 
                     <!-- СТОИМОСТЬ -->
-                    <TextBlock Text="ЧЕГО ЭТО СТОИЛО" Foreground="{DynamicResource Accent}" Margin="0,16,0,4"/>
+                    <TextBlock Text="{DynamicResource L_WhatItCost}" Foreground="{DynamicResource Accent}" Margin="0,16,0,4"/>
                     <TextBlock x:Name="CostText" TextWrapping="Wrap"
                                Foreground="{DynamicResource Foreground}"/>
 

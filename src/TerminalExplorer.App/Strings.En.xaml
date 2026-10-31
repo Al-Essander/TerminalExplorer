@@ -30,6 +30,35 @@
     <sys:String x:Key="L_Language">LANGUAGE</sys:String>
     <sys:String x:Key="L_LangRussian">Русский</sys:String>
     <sys:String x:Key="L_LangEnglish">English</sys:String>
+    <sys:String x:Key="L_Theme">THEME</sys:String>
+    <sys:String x:Key="L_ThemeCalm">Calm</sys:String>
+    <sys:String x:Key="L_ThemeDos">DOS blue</sys:String>
+    <sys:String x:Key="L_ThemeDosFar">DOS Far</sys:String>
+    <sys:String x:Key="L_ThemeClassic">Classic</sys:String>
+    <sys:String x:Key="L_ThemeCustom">Custom</sys:String>
+    <sys:String x:Key="L_ThemeF9">F9 switches the theme right in the explorer window</sys:String>
+    <sys:String x:Key="L_ColorsTitle">COLORS (custom theme)</sys:String>
+    <sys:String x:Key="L_ColorsHint">Format #RRGGBB or #AARRGGBB. Changes apply immediately.</sys:String>
+    <sys:String x:Key="L_PickColor">Pick color</sys:String>
+    <sys:String x:Key="L_SeedColors">Copy colors from the current theme</sys:String>
+    <sys:String x:Key="L_FontSection">FONT</sys:String>
+    <sys:String x:Key="L_FontSize">Size</sys:String>
+    <sys:String x:Key="L_FontFamily">Family</sys:String>
+    <sys:String x:Key="L_TabsSection">TABS</sys:String>
+    <sys:String x:Key="L_TabHeight">Height</sys:String>
+    <sys:String x:Key="L_TabMaxWidth">Max width</sys:String>
+    <sys:String x:Key="L_TabPadding">Padding</sys:String>
+    <sys:String x:Key="L_SoundSection">SOUND</sys:String>
+    <sys:String x:Key="L_SoundEnabled">UI sounds</sys:String>
+    <sys:String x:Key="L_OpenSoundsFolder">Open sounds folder</sys:String>
+    <sys:String x:Key="L_ReloadSounds">Reload</sys:String>
+    <sys:String x:Key="L_BehaviourSection">BEHAVIOR</sys:String>
+    <sys:String x:Key="L_OpenFoldersInNewTab">Open folders in a new tab</sys:String>
+    <sys:String x:Key="L_SettingsTitle">SETTINGS</sys:String>
+    <sys:String x:Key="L_Done">Done</sys:String>
+    <sys:String x:Key="L_SoundsNone">No sound files. Put WAV files in the sounds folder: {0} — they play on tab switch, tab close, navigation and error.</sys:String>
+    <sys:String x:Key="L_SoundsFound">Found: {0}</sys:String>
+    <sys:String x:Key="L_SoundsMissing">   Missing: {0}</sys:String>
 
     <!-- Right pane -->
     <sys:String x:Key="L_Console">CONSOLE</sys:String>
@@ -94,4 +123,95 @@
     <sys:String x:Key="L_Found">found</sys:String>
     <sys:String x:Key="L_SearchError">search error</sys:String>
     <sys:String x:Key="L_Close">Close</sys:String>
+
+    <!-- Bloom filter panel -->
+    <sys:String x:Key="L_BloomTitle">HOW THE BLOOM FILTER WORKS</sys:String>
+    <sys:String x:Key="L_BloomEmpty">Enter a query — the panel will show how a name is filtered by its signature.</sys:String>
+    <sys:String x:Key="L_BloomHeader">BLOOM FILTER · query "{0}" · found {1}</sys:String>
+    <sys:String x:Key="L_BloomStep1">1. Query</sys:String>
+    <sys:String x:Key="L_BloomStep2">2. Split into bigrams</sys:String>
+    <sys:String x:Key="L_BloomStep3">3. Hash (FNV-1a) → mask bit</sys:String>
+    <sys:String x:Key="L_BloomStep4">4. Query mask — set bits</sys:String>
+    <sys:String x:Key="L_BloomStep5">5. Checking names: signature bits AND mask</sys:String>
+    <sys:String x:Key="L_BloomAndPass">      AND: passed, match</sys:String>
+    <sys:String x:Key="L_BloomAndFalse">      AND: passed (false positive)</sys:String>
+    <sys:String x:Key="L_BloomAndRejected">      AND: rejected</sys:String>
+<!-- Rename -->
+    <sys:String x:Key="L_RenameTitle">RENAME</sys:String>
+    <sys:String x:Key="L_RenameFolder">RENAME FOLDER</sys:String>
+    <sys:String x:Key="L_RenameFile">RENAME FILE</sys:String>
+    <sys:String x:Key="L_Cancel">Cancel</sys:String>
+    <sys:String x:Key="L_Rename">Rename</sys:String>
+    <sys:String x:Key="L_NameEmpty">name cannot be empty</sys:String>
+    <sys:String x:Key="L_NameInvalidChars">invalid characters: \ / : * ? &quot; &lt; &gt; |</sys:String>
+    <sys:String x:Key="L_NameInvalid">invalid name</sys:String>
+    <sys:String x:Key="L_NameEndsWith">name cannot end with a dot or space</sys:String>
+    <sys:String x:Key="L_NameReserved">name {0} is reserved by the system</sys:String>
+
+    <!-- Color picker -->
+    <sys:String x:Key="L_PickColorTitle">COLOR</sys:String>
+    <sys:String x:Key="L_Hue">HUE</sys:String>
+    <sys:String x:Key="L_Hex">HEX</sys:String>
+    <sys:String x:Key="L_Choose">Choose</sys:String>
+<!-- Folder tree generator -->
+    <sys:String x:Key="L_FolderTreeTitle">FOLDER STRUCTURE GENERATOR</sys:String>
+    <sys:String x:Key="L_CreateIn">Create in</sys:String>
+    <sys:String x:Key="L_RootName">Root name</sys:String>
+    <sys:String x:Key="L_FolderTreeHint">Child folders. Nesting up to three levels.</sys:String>
+    <sys:String x:Key="L_FolderName">Folder name</sys:String>
+    <sys:String x:Key="L_AddToSelected">Add to selected</sys:String>
+    <sys:String x:Key="L_QuickAdd">Quick add</sys:String>
+    <sys:String x:Key="L_AddByList">Add by list</sys:String>
+    <sys:String x:Key="L_AddByListHint">Comma-separated names. Added to the selected folder at one level.</sys:String>
+    <sys:String x:Key="L_Templates">Templates</sys:String>
+    <sys:String x:Key="L_SaveTemplate">Save as template</sys:String>
+    <sys:String x:Key="L_DeleteTemplate">Delete template</sys:String>
+    <sys:String x:Key="L_Create">Create</sys:String>
+    <sys:String x:Key="L_TreeTooDeep">template is not created deeper than {0} levels</sys:String>
+    <sys:String x:Key="L_AddedFolders">folders added: {0}</sys:String>
+    <sys:String x:Key="L_NoValidNames">no valid names</sys:String>
+    <sys:String x:Key="L_SelectFolder">select a folder in the tree</sys:String>
+    <sys:String x:Key="L_RootCantDelete">the root cannot be deleted — only renamed</sys:String>
+    <sys:String x:Key="L_EnterFolderName">enter a folder name</sys:String>
+    <sys:String x:Key="L_InvalidName">invalid name: {0}</sys:String>
+    <sys:String x:Key="L_FolderExists">folder already exists: {0}</sys:String>
+    <sys:String x:Key="L_CreatedFolders">folders created: {0}</sys:String>
+    <sys:String x:Key="L_CreateError">creation error: {0}</sys:String>
+    <sys:String x:Key="L_SaveTemplatesError">could not save templates</sys:String>
+    <sys:String x:Key="L_SetRootForTemplate">set a root name — it becomes the template name</sys:String>
+    <sys:String x:Key="L_TemplateSaved">template saved: {0}</sys:String>
+    <sys:String x:Key="L_SelectTemplate">select a template</sys:String>
+    <sys:String x:Key="L_TemplateDeleted">template deleted: {0}</sys:String>
+    <sys:String x:Key="L_TemplateLoaded">template loaded: {0}</sys:String>
+
+    <!-- Details panel -->
+    <sys:String x:Key="L_DetailsTitle">DETAILS</sys:String>
+    <sys:String x:Key="L_Structure">STRUCTURE</sys:String>
+    <sys:String x:Key="L_WhatTakesSpace">WHAT TAKES SPACE</sys:String>
+    <sys:String x:Key="L_SizeDistribution">SIZE DISTRIBUTION</sys:String>
+    <sys:String x:Key="L_BenfordTitle">LEADING DIGITS OF SIZES</sys:String>
+    <sys:String x:Key="L_WhatItCost">WHAT IT COST</sys:String>
+    <sys:String x:Key="L_OpenInBlender">Open in Blender</sys:String>
+    <sys:String x:Key="L_BlenderBroken">Could not read the header — the file is corrupt or not a .blend.</sys:String>
+    <sys:String x:Key="L_NothingSelected">nothing selected</sys:String>
+    <sys:String x:Key="L_ObjectFolder">&lt;FOLDER&gt;</sys:String>
+    <sys:String x:Key="L_Walking">walking...</sys:String>
+    <sys:String x:Key="L_NoFiles">no files</sys:String>
+    <sys:String x:Key="L_TooFewBenford">too few files to test</sys:String>
+    <sys:String x:Key="L_AnalysisAborted">Traversal interrupted — numbers are incomplete.</sys:String>
+
+    <!-- Built-in editor -->
+    <sys:String x:Key="L_EditClose">Close (Esc)</sys:String>
+    <sys:String x:Key="L_FindLabel">Find: </sys:String>
+    <sys:String x:Key="L_FindHint">  Enter — next, Esc — hide</sys:String>
+    <sys:String x:Key="L_FileNotFound">file not found</sys:String>
+    <sys:String x:Key="L_FileTooBig">file larger than 6 MB — use a real editor for this</sys:String>
+    <sys:String x:Key="L_BinaryFile">binary file — editing text makes no sense</sys:String>
+    <sys:String x:Key="L_ReadOnly">file is read-only</sys:String>
+    <sys:String x:Key="L_Saved">saved</sys:String>
+    <sys:String x:Key="L_SaveError">could not save: {0}</sys:String>
+    <sys:String x:Key="L_UnsavedWarning">unsaved changes: Ctrl+S to save, Shift+Esc to close without saving</sys:String>
+    <sys:String x:Key="L_ReadOnlySuffix">  [read-only]</sys:String>
+    <sys:String x:Key="L_EditorStatus">Line {0}  Col {1}   |   Ctrl+S save   Ctrl+F find   Esc close</sys:String>
+    <sys:String x:Key="L_NotFound">not found: {0}</sys:String>
 </ResourceDictionary>
