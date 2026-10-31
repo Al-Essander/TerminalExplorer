@@ -17,6 +17,7 @@ public static class SessionStore
         public string Path { get; set; } = string.Empty;
         public SortColumn Sort { get; set; }
         public bool SortDescending { get; set; }
+        public bool IsPinned { get; set; }
 
         /// <summary>История вкладки, чтобы «назад» работал и после перезапуска.</summary>
         public List<string> History { get; set; } = [];

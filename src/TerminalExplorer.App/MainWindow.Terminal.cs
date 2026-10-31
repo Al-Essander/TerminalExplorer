@@ -419,6 +419,7 @@ public partial class MainWindow
                 Path = tab.Path,
                 Sort = tab.Sort,
                 SortDescending = tab.SortDescending,
+                IsPinned = tab.IsPinned,
                 History = tab.History,
                 HistoryPosition = tab.HistoryPosition,
                 ConsoleLines = tab.Session?.Screen.SnapshotText(SavedConsoleLines) ?? tab.SavedLines,

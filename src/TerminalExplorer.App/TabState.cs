@@ -18,6 +18,7 @@ public sealed class TabState : INotifyPropertyChanged
 {
     private string _path = string.Empty;
     private bool _isActive;
+    private bool _isPinned;
 
     public string Path
     {
@@ -36,6 +37,13 @@ public sealed class TabState : INotifyPropertyChanged
     {
         get => _isActive;
         set { if (_isActive != value) { _isActive = value; Notify(); } }
+    }
+
+    /// <summary>Закреплённая вкладка не закрывается и держится в начале полосы.</summary>
+    public bool IsPinned
+    {
+        get => _isPinned;
+        set { if (_isPinned != value) { _isPinned = value; Notify(); } }
     }
 
     /// <summary>Подпись вкладки: имя папки, а для корня диска — сама буква.</summary>

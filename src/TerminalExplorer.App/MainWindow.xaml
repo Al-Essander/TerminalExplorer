@@ -92,6 +92,21 @@
             <Setter Property="Foreground" Value="{DynamicResource Dim}"/>
         </Style>
 
+        <!-- Кнопка закрепления вкладки: невидима, пока курсор не над вкладкой. -->
+        <Style x:Key="TabPin" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Width" Value="18"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0,0,3,0"/>
+            <Setter Property="Foreground" Value="{DynamicResource Dim}"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsPinned}" Value="True">
+                    <Setter Property="Foreground" Value="{DynamicResource Accent}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
         <ContextMenu x:Key="FileMenu">
             <MenuItem Header="{DynamicResource L_MenuOpen}" Click="MenuOpen_Click"/>
             <MenuItem Header="{DynamicResource L_MenuOpenInTab}" Click="MenuOpenInTab_Click"/>
@@ -190,14 +205,22 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <!-- Средний клик закрывает вкладку — обрабатывается на всей области. -->
+                                <!-- Средний клик закрывает вкладку — обрабатывается на всей области.
+                                     Перетаскивание за заголовок меняет порядок вкладок. -->
                                 <Border Style="{StaticResource TabBorder}"
                                         MouseDown="Tab_MouseDown"
+                                        PreviewMouseMove="Tab_PreviewMouseMove"
+                                        DragOver="Tab_DragOver"
+                                        Drop="Tab_Drop"
+                                        AllowDrop="True"
                                         Height="{DynamicResource TabHeight}"
                                         Tag="{Binding}">
                                     <StackPanel Orientation="Horizontal"
                                                 VerticalAlignment="Center"
                                                 Margin="{DynamicResource TabPadding}">
+                                        <Button Style="{StaticResource TabPin}" Content="&#xE77A;"
+                                                Tag="{Binding}" Click="TabPin_Click"
+                                                ToolTip="{DynamicResource L_PinTab}"/>
                                         <TextBlock Text="{Binding Title}" Style="{StaticResource TabTitle}"/>
                                         <Button Style="{StaticResource TabClose}" Content="x"
                                                 Tag="{Binding}" Click="TabClose_Click"

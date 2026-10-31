@@ -578,6 +578,7 @@ public partial class MainWindow : Window
                 Path = record.Path,
                 Sort = record.Sort,
                 SortDescending = record.SortDescending,
+                IsPinned = record.IsPinned,
                 SavedLines = record.ConsoleLines,
                 History = record.History.Count > 0 ? record.History : [record.Path],
                 HistoryPosition = record.HistoryPosition >= 0
@@ -590,11 +591,19 @@ public partial class MainWindow : Window
             _tabs.Add(new TabState { Path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) });
 
         // Порядок «по давности» для Ctrl+Tab; недостающие вкладки добавляются в конец.
+        // Индексы RecentOrder относятся к порядку из сессии, поэтому работаем по restoredOrder,
+        // а не по _tabs после переноса закреплённых вкладок в начало.
+        List<TabState> restoredOrder = [.. _tabs];
+
         foreach (int recent in session.RecentOrder)
-            if (recent >= 0 && recent < _tabs.Count && !_recent.Contains(_tabs[recent])) _recent.Add(_tabs[recent]);
+            if (recent >= 0 && recent < restoredOrder.Count && !_recent.Contains(restoredOrder[recent]))
+                _recent.Add(restoredOrder[recent]);
 
         foreach (TabState tab in _tabs)
             if (!_recent.Contains(tab)) _recent.Add(tab);
+
+        // Закреплённые вкладки держим в начале полосы, как при перетаскивании.
+        StabilizePinned();
 
         int index = Math.Clamp(session.ActiveIndex, 0, _tabs.Count - 1);
         await ActivateTabAsync(_tabs[index]);
@@ -685,6 +694,77 @@ public partial class MainWindow : Window
                 if (!ReferenceEquals(tab, _active)) await ActivateTabAsync(tab);
                 break;
         }
+    }
+
+    private Point? _dragStart;
+    private TabState? _dragTab;
+
+    private void Tab_PreviewMouseMove(object sender, MouseEventArgs e)
+    {
+        if (e.LeftButton != MouseButtonState.Pressed) { _dragTab = null; _dragStart = null; return; }
+
+        if (sender is not FrameworkElement { Tag: TabState tab }) return;
+
+        Point position = e.GetPosition(TabBar);
+        _dragTab ??= tab;
+        _dragStart ??= position;
+
+        // Начинаем перетаскивание только после сдвига на порог, чтобы клик не стал драгом.
+        if (_dragStart is { } start && (Math.Abs(position.X - start.X) > SystemParameters.MinimumHorizontalDragDistance))
+            DragDrop.DoDragDrop(TabBar, tab, DragDropEffects.Move);
+    }
+
+    private void Tab_DragOver(object sender, DragEventArgs e)
+    {
+        e.Effects = e.Data.GetData(typeof(TabState)) is TabState ? DragDropEffects.Move : DragDropEffects.None;
+        e.Handled = true;
+    }
+
+    private void Tab_Drop(object sender, DragEventArgs e)
+    {
+        if (sender is not FrameworkElement { Tag: TabState tab }) return;
+        if (e.Data.GetData(typeof(TabState)) is not TabState dragged || ReferenceEquals(dragged, tab)) return;
+
+        MoveTab(dragged, tab);
+        e.Handled = true;
+    }
+
+    /// <summary>Меняет порядок вкладок, сохраняя закреплённые в начале полосы.</summary>
+    private void MoveTab(TabState dragged, TabState target)
+    {
+        int from = _tabs.IndexOf(dragged);
+        int to = _tabs.IndexOf(target);
+        if (from < 0 || to < 0 || from == to) return;
+
+        _tabs.Move(from, to);
+
+        StabilizePinned();
+
+        ScheduleSessionSave();
+    }
+
+    /// <summary>Переставляет закреплённые вкладки в начало полосы, сохраняя их взаимный порядок.</summary>
+    private void StabilizePinned()
+    {
+        var pinned = _tabs.Where(x => x.IsPinned).ToList();
+        var unpinned = _tabs.Where(x => !x.IsPinned).ToList();
+
+        if (pinned.Count == _tabs.Count || pinned.Count == 0) return;
+
+        _tabs.Clear();
+        foreach (TabState tab in pinned) _tabs.Add(tab);
+        foreach (TabState tab in unpinned) _tabs.Add(tab);
+    }
+
+    private async void TabPin_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not FrameworkElement { Tag: TabState tab }) return;
+
+        tab.IsPinned = !tab.IsPinned;
+        StabilizePinned();
+
+        ScheduleSessionSave();
+        await Task.CompletedTask;
     }
 
     // ---------- навигация ----------

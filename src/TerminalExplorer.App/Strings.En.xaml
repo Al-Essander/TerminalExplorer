@@ -264,4 +264,5 @@
     <sys:String x:Key="L_MenuPreview">Preview</sys:String>
     <sys:String x:Key="L_ModeName">By name</sys:String>
     <sys:String x:Key="L_ModeContent">By code (in content)</sys:String>
+    <sys:String x:Key="L_PinTab">Pin tab</sys:String>
 </ResourceDictionary>

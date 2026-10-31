@@ -263,4 +263,5 @@
     <sys:String x:Key="L_MenuPreview">Предпросмотр</sys:String>
     <sys:String x:Key="L_ModeName">По имени</sys:String>
     <sys:String x:Key="L_ModeContent">По коду (в содержимом)</sys:String>
+    <sys:String x:Key="L_PinTab">Закрепить вкладку</sys:String>
 </ResourceDictionary>
