@@ -92,13 +92,16 @@
             <Setter Property="Foreground" Value="{DynamicResource Dim}"/>
         </Style>
 
-        <!-- Кнопка закрепления вкладки: невидима, пока курсор не над вкладкой. -->
+        <!-- Кнопка закрепления вкладки: невидима, пока курсор не над вкладкой.
+         Глиф берётся из Segoe MDL2 Assets (E77A = булавка): он есть в Windows 10+,
+         тогда как в консольном MonoFont этого символа нет. -->
         <Style x:Key="TabPin" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Width" Value="18"/>
             <Setter Property="Padding" Value="0"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Margin" Value="0,0,3,0"/>
             <Setter Property="Foreground" Value="{DynamicResource Dim}"/>
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
             <Setter Property="FontSize" Value="10"/>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsPinned}" Value="True">
