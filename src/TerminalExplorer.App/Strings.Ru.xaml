@@ -250,4 +250,15 @@
     <sys:String x:Key="L_PropertiesError">не удалось открыть свойства</sys:String>
     <sys:String x:Key="L_ThemeStatus">тема: {0}   (F9 — переключить)</sys:String>
     <sys:String x:Key="L_ScaleStatus">масштаб: {0} пт   (Ctrl+0 — сбросить)</sys:String>
+
+    <!-- Окно предпросмотра -->
+    <sys:String x:Key="L_PreviewTitle">ПРЕДПРОСМОТР</sys:String>
+    <sys:String x:Key="L_Preview">Предпросмотр</sys:String>
+    <sys:String x:Key="L_PreviewUnsupported">предпросмотр не поддерживается для</sys:String>
+    <sys:String x:Key="L_PreviewError">не удалось открыть предпросмотр</sys:String>
+    <sys:String x:Key="L_PreviewLoading">загрузка...</sys:String>
+    <sys:String x:Key="L_PreviewPdfFailed">не удалось прочитать PDF</sys:String>
+    <sys:String x:Key="L_PreviewPages">страниц: {0} из {1}</sys:String>
+    <sys:String x:Key="L_PreviewTextStatus">текст</sys:String>
+    <sys:String x:Key="L_MenuPreview">Предпросмотр</sys:String>
 </ResourceDictionary>

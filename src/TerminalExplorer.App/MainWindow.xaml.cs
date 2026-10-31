@@ -965,6 +965,15 @@ public partial class MainWindow : Window
             return;
         }
 
+        // Текстовые файлы и PDF открываются во встроенном предпросмотре одним нажатием,
+        // а не в стороннем приложении (внешнее остаётся доступным из меню «Открыть с помощью»).
+        if (PreviewWindow.CanPreview(entry.FullPath))
+        {
+            var preview = new PreviewWindow(entry.FullPath) { Owner = this };
+            preview.Show();
+            return;
+        }
+
         try
         {
             ShellActions.Open(entry.FullPath);
@@ -1293,6 +1302,22 @@ public partial class MainWindow : Window
 
     private async void MenuOpen_Click(object sender, RoutedEventArgs e) => await OpenSelectedAsync();
 
+    private void MenuPreview_Click(object sender, RoutedEventArgs e) => OpenPreviewForSelection();
+
+    private void OpenPreviewForSelection()
+    {
+        if (Selected is not { IsDirectory: false } entry) { SetStatus(LanguageManager.Tr("L_SelectObject")); return; }
+
+        if (!PreviewWindow.CanPreview(entry.FullPath))
+        {
+            SetStatus(LanguageManager.Tr("L_PreviewUnsupported") + ": " + entry.Extension);
+            return;
+        }
+
+        var preview = new PreviewWindow(entry.FullPath) { Owner = this };
+        preview.Show();
+    }
+
     private async void MenuRename_Click(object sender, RoutedEventArgs e) => await RenameSelectedAsync();
 
     private async void MenuOpenInTab_Click(object sender, RoutedEventArgs e)
@@ -1566,7 +1591,12 @@ public partial class MainWindow : Window
 
         switch (e.Key)
         {
-            case Key.F3 or Key.F4:
+            case Key.F3:
+                e.Handled = true;
+                OpenPreviewForSelection();
+                break;
+
+            case Key.F4:
                 e.Handled = true;
                 OpenEditorForSelection();
                 break;

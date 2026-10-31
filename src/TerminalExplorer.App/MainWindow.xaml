@@ -95,6 +95,7 @@
         <ContextMenu x:Key="FileMenu">
             <MenuItem Header="{DynamicResource L_MenuOpen}" Click="MenuOpen_Click"/>
             <MenuItem Header="{DynamicResource L_MenuOpenInTab}" Click="MenuOpenInTab_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuPreview}" InputGestureText="F3" Click="MenuPreview_Click"/>
             <MenuItem Header="{DynamicResource L_MenuEdit}" InputGestureText="F4" Click="MenuEdit_Click"/>
             <Separator/>
             <MenuItem Header="{DynamicResource L_MenuCopy}" InputGestureText="Ctrl+C" Click="MenuCopy_Click"/>

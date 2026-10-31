@@ -251,4 +251,15 @@
     <sys:String x:Key="L_PropertiesError">could not open properties</sys:String>
     <sys:String x:Key="L_ThemeStatus">theme: {0}   (F9 — switch)</sys:String>
     <sys:String x:Key="L_ScaleStatus">scale: {0} pt   (Ctrl+0 — reset)</sys:String>
+
+    <!-- Preview window -->
+    <sys:String x:Key="L_PreviewTitle">PREVIEW</sys:String>
+    <sys:String x:Key="L_Preview">Preview</sys:String>
+    <sys:String x:Key="L_PreviewUnsupported">preview not supported for</sys:String>
+    <sys:String x:Key="L_PreviewError">could not open preview</sys:String>
+    <sys:String x:Key="L_PreviewLoading">loading...</sys:String>
+    <sys:String x:Key="L_PreviewPdfFailed">could not read PDF</sys:String>
+    <sys:String x:Key="L_PreviewPages">pages: {0} of {1}</sys:String>
+    <sys:String x:Key="L_PreviewTextStatus">text</sys:String>
+    <sys:String x:Key="L_MenuPreview">Preview</sys:String>
 </ResourceDictionary>
