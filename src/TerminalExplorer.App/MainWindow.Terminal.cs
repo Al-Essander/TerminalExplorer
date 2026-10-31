@@ -77,7 +77,7 @@ public partial class MainWindow
     {
         if (_active?.Session is not { } session)
         {
-            TerminalTitle.Text = "КОНСОЛЬ";
+            TerminalTitle.Text = LanguageManager.Tr("L_Console");
             return;
         }
 
@@ -105,7 +105,9 @@ public partial class MainWindow
     }
 
     private void UpdateSyncButton() =>
-        SyncButton.Content = AppSettings.Current.TerminalFollowsPanel ? "⇄ папка: вкл" : "⇄ папка: выкл";
+        SyncButton.Content = AppSettings.Current.TerminalFollowsPanel
+            ? LanguageManager.Tr("L_SyncFolderOn")
+            : LanguageManager.Tr("L_SyncFolderOff");
 
     private void OnTerminalExited(TabState tab)
     {

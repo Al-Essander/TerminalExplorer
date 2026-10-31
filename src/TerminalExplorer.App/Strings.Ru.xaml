@@ -27,6 +27,9 @@
     <!-- Статус -->
     <sys:String x:Key="L_Ready">готов</sys:String>
     <sys:String x:Key="L_SettingsTooltip">Настройки (F10)</sys:String>
+    <sys:String x:Key="L_Language">ЯЗЫК</sys:String>
+    <sys:String x:Key="L_LangRussian">Русский</sys:String>
+    <sys:String x:Key="L_LangEnglish">English</sys:String>
 
     <!-- Правая панель -->
     <sys:String x:Key="L_Console">КОНСОЛЬ</sys:String>
@@ -63,6 +66,8 @@
 
     <!-- Главное меню -->
     <sys:String x:Key="L_AddonsSubmenu">Аддоны</sys:String>
+    <sys:String x:Key="L_RefreshList">Обновить список</sys:String>
+    <sys:String x:Key="L_AddonsFound">аддонов найдено</sys:String>
     <sys:String x:Key="L_ProgramAddons">Папка аддонов программы</sys:String>
     <sys:String x:Key="L_UserAddons">Папка своих аддонов</sys:String>
     <sys:String x:Key="L_QuickAccess">Быстрый доступ</sys:String>
@@ -78,4 +83,15 @@
     <sys:String x:Key="L_ColModified">ИЗМЕНЁН</sys:String>
     <sys:String x:Key="L_ColType">ТИП</sys:String>
     <sys:String x:Key="L_ColAttrib">АТРИБ.</sys:String>
+
+    <!-- Окно поиска -->
+    <sys:String x:Key="L_SearchTitle">ПОИСК</sys:String>
+    <sys:String x:Key="L_ScopeFolder">Эта папка и подпапки</sys:String>
+    <sys:String x:Key="L_ScopeDrives">Все тома (MFT)</sys:String>
+    <sys:String x:Key="L_TypeQuery">введите запрос</sys:String>
+    <sys:String x:Key="L_SearchingFolder">эта папка: ищу...</sys:String>
+    <sys:String x:Key="L_SearchingDrives">все тома: ищу...</sys:String>
+    <sys:String x:Key="L_Found">найдено</sys:String>
+    <sys:String x:Key="L_SearchError">ошибка поиска</sys:String>
+    <sys:String x:Key="L_Close">Закрыть</sys:String>
 </ResourceDictionary>

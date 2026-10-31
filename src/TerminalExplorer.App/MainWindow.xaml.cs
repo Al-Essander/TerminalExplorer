@@ -378,18 +378,18 @@ public partial class MainWindow : Window
             Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom,
         };
 
-        menu.Items.Add(MenuEntry("Обновить список", () =>
+        menu.Items.Add(MenuEntry(LanguageManager.Tr("L_RefreshList"), () =>
         {
             RefreshAddons();
-            SetStatus("аддонов найдено: " + AddonManager.Addons.Count);
+            SetStatus(LanguageManager.Tr("L_AddonsFound") + ": " + AddonManager.Addons.Count);
         }));
 
         menu.Items.Add(new Separator());
 
-        menu.Items.Add(MenuEntry("Папка аддонов программы", () =>
+        menu.Items.Add(MenuEntry(LanguageManager.Tr("L_ProgramAddons"), () =>
             ShellActions.OpenFolder(AddonManager.DirectoryPath)));
 
-        menu.Items.Add(MenuEntry("Папка своих аддонов", () =>
+        menu.Items.Add(MenuEntry(LanguageManager.Tr("L_UserAddons"), () =>
         {
             Directory.CreateDirectory(AddonManager.UserDirectoryPath);
             ShellActions.OpenFolder(AddonManager.UserDirectoryPath);
@@ -410,16 +410,16 @@ public partial class MainWindow : Window
     {
         var menu = new ContextMenu { PlacementTarget = anchor, Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom };
 
-        menu.Items.Add(MenuEntry("Новая вкладка\tCtrl+T", async () =>
+        menu.Items.Add(MenuEntry(LanguageManager.Tr("L_NewTab") + "\tCtrl+T", async () =>
             await NewTabAsync(_active?.Path ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile))));
 
-        menu.Items.Add(MenuEntry("Добавить в избранное\tCtrl+D", AddCurrentToFavorites));
+        menu.Items.Add(MenuEntry(LanguageManager.Tr("L_MenuFavorite") + "\tCtrl+D", AddCurrentToFavorites));
         menu.Items.Add(new Separator());
 
         // --- аддоны ---
         AddonManager.Reload();
 
-        var addons = new MenuItem { Header = "Аддоны" };
+        var addons = new MenuItem { Header = LanguageManager.Tr("L_AddonsSubmenu") };
 
         foreach (AddonManifest addon in AddonManager.Addons)
         {
@@ -430,10 +430,10 @@ public partial class MainWindow : Window
         }
 
         addons.Items.Add(new Separator());
-        addons.Items.Add(MenuEntry("Папка аддонов программы", () =>
+        addons.Items.Add(MenuEntry(LanguageManager.Tr("L_ProgramAddons"), () =>
             ShellActions.OpenFolder(AddonManager.DirectoryPath)));
 
-        addons.Items.Add(MenuEntry("Папка своих аддонов", () =>
+        addons.Items.Add(MenuEntry(LanguageManager.Tr("L_UserAddons"), () =>
         {
             Directory.CreateDirectory(AddonManager.UserDirectoryPath);
             ShellActions.OpenFolder(AddonManager.UserDirectoryPath);
@@ -443,7 +443,7 @@ public partial class MainWindow : Window
         menu.Items.Add(new Separator());
 
         // --- места ---
-        var places = new MenuItem { Header = "Быстрый доступ" };
+        var places = new MenuItem { Header = LanguageManager.Tr("L_QuickAccess") };
 
         foreach (FavoriteItem favorite in Favorites.Items)
         {
@@ -452,25 +452,25 @@ public partial class MainWindow : Window
         }
 
         if (Favorites.Items.Count == 0)
-            places.Items.Add(new MenuItem { Header = "избранное пусто", IsEnabled = false });
+            places.Items.Add(new MenuItem { Header = LanguageManager.Tr("L_FavoritesEmpty"), IsEnabled = false });
 
         menu.Items.Add(places);
         menu.Items.Add(new Separator());
 
-        menu.Items.Add(MenuEntry("Открыть терминал здесь", () =>
+        menu.Items.Add(MenuEntry(LanguageManager.Tr("L_OpenTerminalHere"), () =>
         {
             if (_active is not null) ShellActions.OpenTerminal(_active.Path);
         }));
 
-        menu.Items.Add(MenuEntry("Папка данных программы", () =>
+        menu.Items.Add(MenuEntry(LanguageManager.Tr("L_DataFolder"), () =>
         {
             Directory.CreateDirectory(SessionStore.DirectoryPath);
             ShellActions.OpenFolder(SessionStore.DirectoryPath);
         }));
 
-        menu.Items.Add(MenuEntry("Настройки\tF10", OpenSettings));
+        menu.Items.Add(MenuEntry(LanguageManager.Tr("L_Settings") + "\tF10", OpenSettings));
         menu.Items.Add(new Separator());
-        menu.Items.Add(MenuEntry("Выход", Close));
+        menu.Items.Add(MenuEntry(LanguageManager.Tr("L_Exit"), Close));
 
         menu.IsOpen = true;
     }

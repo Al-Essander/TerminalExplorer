@@ -50,6 +50,10 @@
             <ScrollViewer Grid.Row="1" Margin="14,0,14,0" VerticalScrollBarVisibility="Auto">
                 <StackPanel>
 
+                    <TextBlock Text="ЯЗЫК" Style="{StaticResource SectionTitle}"/>
+                    <ComboBox x:Name="LanguageBox" Width="200" HorizontalAlignment="Left"
+                              SelectionChanged="Language_Changed"/>
+
                     <TextBlock Text="ТЕМА" Style="{StaticResource SectionTitle}"/>
                     <WrapPanel>
                         <Button x:Name="ThemeCalm" Content="Спокойная" Click="Theme_Click" Tag="0"/>

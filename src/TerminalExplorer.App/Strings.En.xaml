@@ -27,6 +27,9 @@
     <!-- Status -->
     <sys:String x:Key="L_Ready">ready</sys:String>
     <sys:String x:Key="L_SettingsTooltip">Settings (F10)</sys:String>
+    <sys:String x:Key="L_Language">LANGUAGE</sys:String>
+    <sys:String x:Key="L_LangRussian">Русский</sys:String>
+    <sys:String x:Key="L_LangEnglish">English</sys:String>
 
     <!-- Right pane -->
     <sys:String x:Key="L_Console">CONSOLE</sys:String>
@@ -63,6 +66,8 @@
 
     <!-- Main menu -->
     <sys:String x:Key="L_AddonsSubmenu">Add-ons</sys:String>
+    <sys:String x:Key="L_RefreshList">Refresh list</sys:String>
+    <sys:String x:Key="L_AddonsFound">add-ons found</sys:String>
     <sys:String x:Key="L_ProgramAddons">Program add-ons folder</sys:String>
     <sys:String x:Key="L_UserAddons">My add-ons folder</sys:String>
     <sys:String x:Key="L_QuickAccess">Quick access</sys:String>
@@ -78,4 +83,15 @@
     <sys:String x:Key="L_ColModified">MODIFIED</sys:String>
     <sys:String x:Key="L_ColType">TYPE</sys:String>
     <sys:String x:Key="L_ColAttrib">ATTR.</sys:String>
+
+    <!-- Search window -->
+    <sys:String x:Key="L_SearchTitle">SEARCH</sys:String>
+    <sys:String x:Key="L_ScopeFolder">This folder and subfolders</sys:String>
+    <sys:String x:Key="L_ScopeDrives">All drives (MFT)</sys:String>
+    <sys:String x:Key="L_TypeQuery">enter a query</sys:String>
+    <sys:String x:Key="L_SearchingFolder">this folder: searching...</sys:String>
+    <sys:String x:Key="L_SearchingDrives">all drives: searching...</sys:String>
+    <sys:String x:Key="L_Found">found</sys:String>
+    <sys:String x:Key="L_SearchError">search error</sys:String>
+    <sys:String x:Key="L_Close">Close</sys:String>
 </ResourceDictionary>

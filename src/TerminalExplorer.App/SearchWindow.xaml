@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         xmlns:local="clr-namespace:TerminalExplorer"
-        Title="ПОИСК"
+        Title="{DynamicResource L_SearchTitle}"
         Height="600" Width="940"
         MinHeight="420" MinWidth="760"
         WindowStartupLocation="CenterOwner"
@@ -30,7 +30,7 @@
             <!-- ЗАГОЛОВОК -->
             <Grid Grid.Row="0" Background="{DynamicResource Selection}"
                   MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
-                <TextBlock Text="  ПОИСК" VerticalAlignment="Center"
+                <TextBlock Text="{DynamicResource L_SearchTitle}" VerticalAlignment="Center"
                            Foreground="{DynamicResource Accent}"/>
                 <Button HorizontalAlignment="Right" Width="34" Content="X"
                         BorderThickness="0" Click="Close_Click"/>
@@ -48,8 +48,8 @@
                          KeyDown="QueryBox_KeyDown"/>
                 <ComboBox Grid.Column="1" x:Name="ScopeBox" Margin="8,0,0,0"
                           Width="170" SelectionChanged="ScopeBox_Changed">
-                    <ComboBoxItem Content="Эта папка и подпапки"/>
-                    <ComboBoxItem Content="Все тома (MFT)"/>
+                    <ComboBoxItem Content="{DynamicResource L_ScopeFolder}"/>
+                    <ComboBoxItem Content="{DynamicResource L_ScopeDrives}"/>
                 </ComboBox>
             </Grid>
 
@@ -119,7 +119,7 @@
                            VerticalAlignment="Center"
                            Foreground="{DynamicResource Accent}"/>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,10,0">
-                    <Button Content="Закрыть" Click="Close_Click"/>
+                    <Button Content="{DynamicResource L_Close}" Click="Close_Click"/>
                 </StackPanel>
             </Grid>
         </Grid>

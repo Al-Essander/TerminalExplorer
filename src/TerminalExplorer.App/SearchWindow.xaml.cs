@@ -48,7 +48,7 @@ public partial class SearchWindow : Window
         if (string.IsNullOrWhiteSpace(QueryBox.Text))
         {
             _results.Clear();
-            StatusText.Text = "введите запрос";
+            StatusText.Text = LanguageManager.Tr("L_TypeQuery");
             Bloom.Reset();
             return;
         }
@@ -76,7 +76,7 @@ public partial class SearchWindow : Window
         var cts = new CancellationTokenSource();
         _searchCts = cts;
 
-        StatusText.Text = (scope == SearchScope.AllDrives ? "все тома" : "эта папка") + ": ищу...";
+        StatusText.Text = LanguageManager.Tr(scope == SearchScope.AllDrives ? "L_SearchingDrives" : "L_SearchingFolder");
 
         try
         {
@@ -89,7 +89,7 @@ public partial class SearchWindow : Window
             foreach (SearchResult result in found.Take(1000))
                 _results.Add(result);
 
-            StatusText.Text = "найдено: " + found.Count;
+            StatusText.Text = LanguageManager.Tr("L_Found") + ": " + found.Count;
             Bloom.ShowForQuery(query, scope, found.Count);
         }
         catch (OperationCanceledException)
@@ -98,7 +98,7 @@ public partial class SearchWindow : Window
         }
         catch (Exception ex)
         {
-            StatusText.Text = "ошибка поиска: " + ex.Message;
+            StatusText.Text = LanguageManager.Tr("L_SearchError") + ": " + ex.Message;
         }
         finally
         {

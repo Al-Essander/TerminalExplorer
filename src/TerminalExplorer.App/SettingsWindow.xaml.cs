@@ -77,7 +77,37 @@ public partial class SettingsWindow : Window
         PathHint.Text = SessionStore.DirectoryPath;
         UpdateSoundHint();
 
+        // Язык: пункты показываем на выбранном языке, текущий отмечаем.
+        LanguageBox.Items.Clear();
+        LanguageBox.Items.Add(new ComboBoxItem { Content = LanguageManager.Tr("L_LangRussian") });
+        LanguageBox.Items.Add(new ComboBoxItem { Content = LanguageManager.Tr("L_LangEnglish") });
+        LanguageBox.SelectedIndex = AppSettings.Current.Language;
+
         _loading = false;
+    }
+
+    private void Language_Changed(object sender, SelectionChangedEventArgs e)
+    {
+        if (_loading) return;
+
+        var language = (UiLanguage)LanguageBox.SelectedIndex;
+        if (language == LanguageManager.Current) return;
+
+        AppSettings.Current.Language = (int)language;
+        AppSettings.Current.Save();
+
+        // Окно настроек пересоздаём под новый язык: его подписи и пункты не привязаны
+        // к DynamicResource, поэтому проще показать заново, чем пересчитывать каждую строку.
+        LanguageManager.Apply(language);
+        LanguageManager.Changed += ReloadWindowOnLanguageChange;
+    }
+
+    private void ReloadWindowOnLanguageChange()
+    {
+        LanguageManager.Changed -= ReloadWindowOnLanguageChange;
+        var window = new SettingsWindow { Owner = Owner };
+        Close();
+        window.ShowDialog();
     }
 
     private void UpdateSoundHint()
