@@ -49,6 +49,11 @@ public partial class MainWindow : Window
 
         FileList.AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
 
+        // Меню закрыто не левым кликом (Esc, клик вне окна) — снимаем флаг, чтобы
+        // следующий левый клик снова мог начать перетаскивание.
+        if (FileList.ContextMenu is { } fileMenu)
+            fileMenu.Closed += (_, _) => _menuOpen = false;
+
         SourceInitialized += (_, _) =>
         {
             // Хук ставится, как только у окна появляется дескриптор: раньше HwndSource нет.
@@ -62,6 +67,8 @@ public partial class MainWindow : Window
             SessionStore.MigrateFromAppData();
 
             AppSettings.Load().ApplyToResources();
+            // Язык по умолчанию — из настроек; применяется до построения строк-заголовков.
+            LanguageManager.Apply((UiLanguage)AppSettings.Current.Language);
             Favorites.Load();
             FavoriteList.ItemsSource = Favorites.Items;
 
@@ -261,6 +268,8 @@ public partial class MainWindow : Window
     private void FileList_RightDown(object sender, MouseButtonEventArgs e)
     {
         _menuScreenPoint = PointToScreen(e.GetPosition(this));
+        // Собственное меню открыто; убираем его следующим левым кликом.
+        _menuOpen = true;
 
         if (ItemUnderMouse(e) is { } clicked)
         {
@@ -1009,8 +1018,24 @@ public partial class MainWindow : Window
     /// <summary>Точка нажатия — от неё отсчитывается порог начала перетаскивания.</summary>
     private Point _dragOrigin;
 
-    private void FileList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) =>
+    /// <summary>
+    /// ПКМ открыл собственное меню. Следующий левый клик его закрывает; на этом клике
+    /// нельзя начинать перетаскивание, иначе лёгкое дрожание руки превратило бы «закрыть меню»
+    /// в drag и скопировало бы файл в ту же папку («имя - копия»).
+    /// </summary>
+    private bool _menuOpen;
+
+    /// <summary>Давление сброшено для текущей сессии «нажал-повёл-отпустил» (см. <see cref="_menuOpen"/>).</summary>
+    private bool _suppressDrag;
+
+    private void FileList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
         _dragOrigin = e.GetPosition(null);
+
+        // Кнопка, закрывающая контекстное меню, не начинает перетаскивание.
+        _suppressDrag = _menuOpen;
+        _menuOpen = false;
+    }
 
     /// <summary>
     /// Начинает перетаскивание файлов наружу. Порог из SystemParameters обязателен:
@@ -1020,6 +1045,10 @@ public partial class MainWindow : Window
     private void FileList_MouseMove(object sender, MouseEventArgs e)
     {
         if (e.LeftButton != MouseButtonState.Pressed) return;
+
+        // Клик, закрывающий меню, не должен начинать перетаскивание.
+        // Флаг снимается по отпусканию кнопки (см. FileList_MouseLeftButtonUp).
+        if (_suppressDrag) return;
 
         Vector shift = e.GetPosition(null) - _dragOrigin;
         if (Math.Abs(shift.X) < SystemParameters.MinimumHorizontalDragDistance &&

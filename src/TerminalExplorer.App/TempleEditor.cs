@@ -193,11 +193,14 @@ public sealed class TempleEditor : Border
 
             byte[] bytes = File.ReadAllBytes(path);
 
-            // Двоичные файлы не открываем: нулевой байт в начале почти всегда значит «не текст».
-            int probe = Math.Min(bytes.Length, 8192);
-            for (int i = 0; i < probe; i++)
+            // Двоичные файлы не открываем: нулевой байт почти всегда значит «не текст».
+            // Сканируем не только начало — бинарник с «текстовыми» первыми байтами (как .blend)
+            // иначе попадает в редактор и становится несохранённой правкой, из которой нет выхода.
+            // Исключение одно: BOM UTF-16 (FF FE) — там ноль легален.
+            bool isUtf16Bom = bytes.Length >= 2 && (bytes[0] is 0xFF or 0xFE);
+            foreach (byte b in bytes)
             {
-                if (bytes[i] == 0 && !(bytes.Length >= 2 && (bytes[0] is 0xFF or 0xFE)))
+                if (b == 0 && !isUtf16Bom)
                 {
                     message = "двоичный файл — правка текста не имеет смысла";
                     return false;

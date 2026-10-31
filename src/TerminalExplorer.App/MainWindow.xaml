@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         xmlns:local="clr-namespace:TerminalExplorer"
-        Title="TERMINAL EXPLORER"
+        Title="{DynamicResource L_AppTitle}"
         Icon="app.ico"
         Height="700" Width="1100"
         MinHeight="400" MinWidth="700"
@@ -93,47 +93,47 @@
         </Style>
 
         <ContextMenu x:Key="FileMenu">
-            <MenuItem Header="Открыть" Click="MenuOpen_Click"/>
-            <MenuItem Header="Открыть в новой вкладке" Click="MenuOpenInTab_Click"/>
-            <MenuItem Header="Просмотр / правка	F4" Click="MenuEdit_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuOpen}" Click="MenuOpen_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuOpenInTab}" Click="MenuOpenInTab_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuEdit}" InputGestureText="F4" Click="MenuEdit_Click"/>
             <Separator/>
-            <MenuItem Header="Копировать	Ctrl+C" Click="MenuCopy_Click"/>
-            <MenuItem Header="Вырезать	Ctrl+X" Click="MenuCut_Click"/>
-            <MenuItem Header="Вставить	Ctrl+V" Click="MenuPaste_Click"/>
-            <MenuItem Header="Удалить	Del" Click="MenuDelete_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuCopy}" InputGestureText="Ctrl+C" Click="MenuCopy_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuCut}" InputGestureText="Ctrl+X" Click="MenuCut_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuPaste}" InputGestureText="Ctrl+V" Click="MenuPaste_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuDelete}" InputGestureText="Del" Click="MenuDelete_Click"/>
             <Separator/>
-            <MenuItem Header="Копировать как путь" Click="MenuCopyPath_Click"/>
-            <MenuItem Header="Показать в проводнике Windows" Click="MenuReveal_Click"/>
-            <MenuItem Header="Переименовать	F2" Click="MenuRename_Click"/>
-            <MenuItem Header="Открыть терминал здесь" Click="MenuTerminal_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuCopyPath}" Click="MenuCopyPath_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuReveal}" Click="MenuReveal_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuRename}" InputGestureText="F2" Click="MenuRename_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuTerminal}" Click="MenuTerminal_Click"/>
             <Separator/>
-            <MenuItem Header="Добавить в избранное" Click="MenuAddFavorite_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuFavorite}" Click="MenuAddFavorite_Click"/>
             <Separator/>
-            <MenuItem Header="Свойства" Click="MenuProperties_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuProperties}" Click="MenuProperties_Click"/>
             <Separator/>
-            <MenuItem Header="Ещё: меню Windows...	Shift+ПКМ" Click="MenuShell_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuShell}" InputGestureText="Shift+ПКМ" Click="MenuShell_Click"/>
         </ContextMenu>
 
         <!-- Меню элемента избранного. Tag кнопки несёт сам FavoriteItem. -->
         <ContextMenu x:Key="FavoriteMenu">
-            <MenuItem Header="Открыть" Click="FavoriteMenuOpen_Click"/>
-            <MenuItem Header="Открыть в новой вкладке" Click="FavoriteMenuOpenInTab_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuOpen}" Click="FavoriteMenuOpen_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuOpenInTab}" Click="FavoriteMenuOpenInTab_Click"/>
             <Separator/>
-            <MenuItem Header="Выше" Click="FavoriteMenuUp_Click"/>
-            <MenuItem Header="Ниже" Click="FavoriteMenuDown_Click"/>
+            <MenuItem Header="{DynamicResource L_FavUp}" Click="FavoriteMenuUp_Click"/>
+            <MenuItem Header="{DynamicResource L_FavDown}" Click="FavoriteMenuDown_Click"/>
             <Separator/>
-            <MenuItem Header="Копировать как путь" Click="FavoriteMenuCopyPath_Click"/>
-            <MenuItem Header="Убрать из избранного" Click="FavoriteMenuRemove_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuCopyPath}" Click="FavoriteMenuCopyPath_Click"/>
+            <MenuItem Header="{DynamicResource L_FavRemove}" Click="FavoriteMenuRemove_Click"/>
         </ContextMenu>
 
         <ContextMenu x:Key="DriveMenu">
-            <MenuItem Header="Открыть" Click="DriveMenuOpen_Click"/>
-            <MenuItem Header="Открыть в новой вкладке" Click="DriveMenuOpenInTab_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuOpen}" Click="DriveMenuOpen_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuOpenInTab}" Click="DriveMenuOpenInTab_Click"/>
             <Separator/>
-            <MenuItem Header="Добавить в избранное" Click="DriveMenuFavorite_Click"/>
-            <MenuItem Header="Открыть терминал здесь" Click="DriveMenuTerminal_Click"/>
+            <MenuItem Header="{DynamicResource L_DriveFavorite}" Click="DriveMenuFavorite_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuTerminal}" Click="DriveMenuTerminal_Click"/>
             <Separator/>
-            <MenuItem Header="Свойства" Click="DriveMenuProperties_Click"/>
+            <MenuItem Header="{DynamicResource L_MenuProperties}" Click="DriveMenuProperties_Click"/>
         </ContextMenu>
     </Window.Resources>
 
@@ -155,13 +155,17 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0" Margin="8,0,0,0"
-                           VerticalAlignment="Center"
-                           Foreground="{DynamicResource Accent}"
-                           Text="TERMINAL EXPLORER  v0.1"/>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="8,0,0,0"
+                            VerticalAlignment="Center">
+                    <TextBlock Foreground="{DynamicResource Accent}"
+                               Text="{DynamicResource L_AppTitle}"/>
+                    <TextBlock Foreground="{DynamicResource Accent}"
+                               Margin="8,0,0,0"
+                               Text="{DynamicResource L_AppVersion}"/>
+                </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <Button Style="{StaticResource TitleButton}" Content="≡" Width="30" ToolTip="Настройки (F10)" Click="Settings_Click"/>
+                    <Button Style="{StaticResource TitleButton}" Content="≡" Width="30" ToolTip="{DynamicResource L_SettingsTooltip}" Click="Settings_Click"/>
                     <Button Style="{StaticResource TitleButton}" Content="_" Click="Minimize_Click"/>
                     <Button Style="{StaticResource TitleButton}" Content="[ ]" Click="Maximize_Click"/>
                     <Button Style="{StaticResource TitleButton}" Content="X" Click="Close_Click"/>
@@ -196,7 +200,7 @@
                                         <TextBlock Text="{Binding Title}" Style="{StaticResource TabTitle}"/>
                                         <Button Style="{StaticResource TabClose}" Content="x"
                                                 Tag="{Binding}" Click="TabClose_Click"
-                                                ToolTip="Закрыть (Ctrl+W)"/>
+                                                ToolTip="{DynamicResource L_CloseTab}"/>
                                     </StackPanel>
                                 </Border>
                             </DataTemplate>
@@ -205,7 +209,7 @@
                 </ScrollViewer>
 
                 <Button Grid.Column="1" Content="+" Width="28" Padding="0" Margin="2,2,4,2"
-                        BorderThickness="0" ToolTip="Новая вкладка (Ctrl+T)"
+                        BorderThickness="0" ToolTip="{DynamicResource L_NewTabTooltip}"
                         Click="NewTab_Click"/>
             </Grid>
 
@@ -221,13 +225,13 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0" x:Name="BackButton" Content="&lt;" Width="30"
-                        ToolTip="Назад (Alt+Left)" Click="Back_Click"/>
+                        ToolTip="{DynamicResource L_Back}" Click="Back_Click"/>
                 <Button Grid.Column="1" x:Name="ForwardButton" Content="&gt;" Width="30" Margin="2,0,0,0"
-                        ToolTip="Вперёд (Alt+Right)" Click="Forward_Click"/>
+                        ToolTip="{DynamicResource L_Forward}" Click="Forward_Click"/>
                 <Button Grid.Column="2" x:Name="UpButton" Content="^" Width="30" Margin="2,0,0,0"
-                        ToolTip="Вверх (Backspace)" Click="Up_Click"/>
+                        ToolTip="{DynamicResource L_Up}" Click="Up_Click"/>
                 <Button Grid.Column="3" x:Name="SearchButton" Content="?" Width="30" Margin="2,0,0,0"
-                        ToolTip="Поиск (Ctrl+F)" Click="Search_Click"/>
+                        ToolTip="{DynamicResource L_Search}" Click="Search_Click"/>
                 <!-- Приглашение показывает текущий диск, иначе оно вводило бы в заблуждение. -->
                 <TextBlock Grid.Column="4" x:Name="PromptText" Text=" C:\&gt; " VerticalAlignment="Center"
                            Foreground="{DynamicResource Dim}"/>
@@ -260,7 +264,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Text=" ДИСКИ" Margin="0,2,0,4"
+                        <TextBlock Grid.Row="0" Text="{DynamicResource L_Drives}" Margin="0,2,0,4"
                                    Foreground="{DynamicResource Accent}"/>
 
                         <ItemsControl Grid.Row="1" x:Name="DriveList" Background="Transparent" BorderThickness="0">
@@ -293,11 +297,11 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Text=" ИЗБРАННОЕ" VerticalAlignment="Center"
+                            <TextBlock Grid.Column="0" Text="{DynamicResource L_Favorites}" VerticalAlignment="Center"
                                        Foreground="{DynamicResource Accent}"/>
                             <Button Grid.Column="1" x:Name="AddFavoriteButton" Content="+" Width="22" Padding="0"
                                     Margin="0,0,3,0" BorderThickness="0"
-                                    ToolTip="Добавить текущую папку (Ctrl+D)"
+                                    ToolTip="{DynamicResource L_AddToFavorites}"
                                     Click="AddFavorite_Click"/>
                         </Grid>
 
@@ -330,7 +334,7 @@
                                                     BorderThickness="0"
                                                     Foreground="{DynamicResource Dim}"
                                                     Tag="{Binding}"
-                                                    ToolTip="Убрать из избранного"
+                                                    ToolTip="{DynamicResource L_FavRemove}"
                                                     Click="RemoveFavorite_Click"/>
                                         </Grid>
                                     </DataTemplate>
@@ -345,11 +349,11 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Text=" АДДОНЫ" VerticalAlignment="Center"
+                            <TextBlock Grid.Column="0" Text="{DynamicResource L_Addons}" VerticalAlignment="Center"
                                        Foreground="{DynamicResource Accent}"/>
                             <Button Grid.Column="1" Content="..." Width="26" Padding="0"
                                     Margin="0,0,3,0" BorderThickness="0"
-                                    ToolTip="Папка аддонов и обновление списка"
+                                    ToolTip="{DynamicResource L_AddonsFolder}"
                                     Click="AddonsMenu_Click"/>
                         </Grid>
 
@@ -401,7 +405,7 @@
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListView.View>
                         <GridView AllowsColumnReorder="True">
-                            <GridViewColumn Header="ИМЯ" Width="420">
+                            <GridViewColumn Header="{DynamicResource L_ColName}" Width="420">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Margin="4,1,6,1">
@@ -424,7 +428,7 @@
                                 У остальных колонок свои шаблоны только ради отступов:
                                 DisplayMemberBinding рисует текст вплотную к границам ячейки.
                             -->
-                            <GridViewColumn Header="РАЗМЕР" Width="100">
+                            <GridViewColumn Header="{DynamicResource L_ColSize}" Width="100">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding SizeText}" Margin="6,1,10,1"
@@ -432,21 +436,21 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="ИЗМЕНЁН" Width="190">
+                            <GridViewColumn Header="{DynamicResource L_ColModified}" Width="190">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding ModifiedText}" Margin="8,1,10,1"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="ТИП" Width="100">
+                            <GridViewColumn Header="{DynamicResource L_ColType}" Width="100">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding TypeText}" Margin="8,1,10,1"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="АТРИБ." Width="80">
+                            <GridViewColumn Header="{DynamicResource L_ColAttrib}" Width="80">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding AttributesText}" Margin="8,1,10,1"/>
@@ -481,16 +485,16 @@
 
                             <TextBlock Grid.Column="0" x:Name="TerminalTitle" Margin="8,2,0,2"
                                        Foreground="{DynamicResource Accent}"
-                                       TextTrimming="CharacterEllipsis" Text="КОНСОЛЬ"/>
+                                       TextTrimming="CharacterEllipsis" Text="{DynamicResource L_Console}"/>
 
                             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                <Button x:Name="SyncButton" Content="⇄ папка" Padding="6,0" BorderThickness="0"
-                                        ToolTip="Консоль и панель файлов следуют за папкой друг друга"
+                                <Button x:Name="SyncButton" Content="{DynamicResource L_SyncFolder}" Padding="6,0" BorderThickness="0"
+                                        ToolTip="{DynamicResource L_SyncTooltip}"
                                         Click="TerminalSync_Click"/>
                                 <Button Content="↻" Width="26" Padding="0" BorderThickness="0"
-                                        ToolTip="Перезапустить оболочку" Click="TerminalRestart_Click"/>
+                                        ToolTip="{DynamicResource L_RestartShell}" Click="TerminalRestart_Click"/>
                                 <Button Content="⛶" Width="26" Padding="0" BorderThickness="0"
-                                        ToolTip="Развернуть консоль на всё окно (F11)" Click="TerminalMaximize_Click"/>
+                                        ToolTip="{DynamicResource L_MaximizeTerminal}" Click="TerminalMaximize_Click"/>
                             </StackPanel>
                         </Grid>
 
@@ -517,7 +521,7 @@
                 <TextBlock Grid.Column="0" x:Name="StatusText" Margin="8,0,0,0"
                            VerticalAlignment="Center"
                            Foreground="{DynamicResource Accent}"
-                           Text="готов"/>
+                           Text="{DynamicResource L_Ready}"/>
 
                 <TextBlock Grid.Column="1" x:Name="DiskText" Margin="0,0,8,0"
                            VerticalAlignment="Center"

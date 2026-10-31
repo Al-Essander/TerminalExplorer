@@ -44,6 +44,9 @@ public sealed class AppSettings
     public bool OpenFoldersInNewTab { get; set; }
     public bool ShowHiddenFiles { get; set; } = true;
 
+    /// <summary>Язык интерфейса: 0 — русский, 1 — английский.</summary>
+    public int Language { get; set; }
+
     // --- терминал ---
     /// <summary>Путь или имя оболочки; пусто — PowerShell 7, затем Windows PowerShell, затем cmd.</summary>
     public string TerminalShell { get; set; } = string.Empty;

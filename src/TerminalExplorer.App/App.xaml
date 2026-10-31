@@ -11,6 +11,8 @@
                 -->
                 <ResourceDictionary Source="Palette.Calm.xaml"/>
                 <ResourceDictionary Source="Theme.xaml"/>
+                <!-- Словарь строк интерфейса. Слот 2 зафиксирован в LanguageManager. -->
+                <ResourceDictionary Source="Strings.Ru.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

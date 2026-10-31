@@ -1,0 +1,81 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Заголовок окна -->
+    <sys:String x:Key="L_AppTitle">TERMINAL EXPLORER</sys:String>
+    <sys:String x:Key="L_AppVersion">v0.1</sys:String>
+
+    <!-- Вкладки -->
+    <sys:String x:Key="L_NewTab">Новая вкладка</sys:String>
+    <sys:String x:Key="L_NewTabTooltip">Новая вкладка (Ctrl+T)</sys:String>
+    <sys:String x:Key="L_CloseTab">Закрыть (Ctrl+W)</sys:String>
+
+    <!-- Сайдбар -->
+    <sys:String x:Key="L_Drives">ДИСКИ</sys:String>
+    <sys:String x:Key="L_Favorites">ИЗБРАННОЕ</sys:String>
+    <sys:String x:Key="L_Addons">АДДОНЫ</sys:String>
+    <sys:String x:Key="L_AddToFavorites">Добавить текущую папку (Ctrl+D)</sys:String>
+    <sys:String x:Key="L_AddonsFolder">Папка аддонов и обновление списка</sys:String>
+
+    <!-- Панель навигации -->
+    <sys:String x:Key="L_Back">Назад (Alt+Left)</sys:String>
+    <sys:String x:Key="L_Forward">Вперёд (Alt+Right)</sys:String>
+    <sys:String x:Key="L_Up">Вверх (Backspace)</sys:String>
+    <sys:String x:Key="L_Search">Поиск (Ctrl+F)</sys:String>
+
+    <!-- Статус -->
+    <sys:String x:Key="L_Ready">готов</sys:String>
+    <sys:String x:Key="L_SettingsTooltip">Настройки (F10)</sys:String>
+
+    <!-- Правая панель -->
+    <sys:String x:Key="L_Console">КОНСОЛЬ</sys:String>
+    <sys:String x:Key="L_SyncFolder">⇄ папка</sys:String>
+    <sys:String x:Key="L_SyncFolderOn">⇄ папка: вкл</sys:String>
+    <sys:String x:Key="L_SyncFolderOff">⇄ папка: выкл</sys:String>
+    <sys:String x:Key="L_SyncTooltip">Консоль и панель следуют за папкой друг друга</sys:String>
+    <sys:String x:Key="L_RestartShell">Перезапустить оболочку</sys:String>
+    <sys:String x:Key="L_MaximizeTerminal">Развернуть консоль (F11)</sys:String>
+
+    <!-- Меню файлов -->
+    <sys:String x:Key="L_MenuOpen">Открыть</sys:String>
+    <sys:String x:Key="L_MenuOpenInTab">Открыть в новой вкладке</sys:String>
+    <sys:String x:Key="L_MenuEdit">Просмотр / правка</sys:String>
+    <sys:String x:Key="L_MenuCopy">Копировать</sys:String>
+    <sys:String x:Key="L_MenuCut">Вырезать</sys:String>
+    <sys:String x:Key="L_MenuPaste">Вставить</sys:String>
+    <sys:String x:Key="L_MenuDelete">Удалить</sys:String>
+    <sys:String x:Key="L_MenuCopyPath">Копировать как путь</sys:String>
+    <sys:String x:Key="L_MenuReveal">Показать в проводнике</sys:String>
+    <sys:String x:Key="L_MenuRename">Переименовать</sys:String>
+    <sys:String x:Key="L_MenuTerminal">Открыть терминал здесь</sys:String>
+    <sys:String x:Key="L_MenuFavorite">Добавить в избранное</sys:String>
+    <sys:String x:Key="L_MenuProperties">Свойства</sys:String>
+    <sys:String x:Key="L_MenuShell">Ещё: меню Windows...</sys:String>
+
+    <!-- Меню избранного -->
+    <sys:String x:Key="L_FavUp">Выше</sys:String>
+    <sys:String x:Key="L_FavDown">Ниже</sys:String>
+    <sys:String x:Key="L_FavRemove">Убрать из избранного</sys:String>
+
+    <!-- Меню диска -->
+    <sys:String x:Key="L_DriveFavorite">Добавить в избранное</sys:String>
+
+    <!-- Главное меню -->
+    <sys:String x:Key="L_AddonsSubmenu">Аддоны</sys:String>
+    <sys:String x:Key="L_ProgramAddons">Папка аддонов программы</sys:String>
+    <sys:String x:Key="L_UserAddons">Папка своих аддонов</sys:String>
+    <sys:String x:Key="L_QuickAccess">Быстрый доступ</sys:String>
+    <sys:String x:Key="L_FavoritesEmpty">избранное пусто</sys:String>
+    <sys:String x:Key="L_OpenTerminalHere">Открыть терминал здесь</sys:String>
+    <sys:String x:Key="L_DataFolder">Папка данных программы</sys:String>
+    <sys:String x:Key="L_Settings">Настройки</sys:String>
+    <sys:String x:Key="L_Exit">Выход</sys:String>
+
+    <!-- Столбцы списка -->
+    <sys:String x:Key="L_ColName">ИМЯ</sys:String>
+    <sys:String x:Key="L_ColSize">РАЗМЕР</sys:String>
+    <sys:String x:Key="L_ColModified">ИЗМЕНЁН</sys:String>
+    <sys:String x:Key="L_ColType">ТИП</sys:String>
+    <sys:String x:Key="L_ColAttrib">АТРИБ.</sys:String>
+</ResourceDictionary>
