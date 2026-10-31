@@ -796,7 +796,7 @@ public partial class MainWindow : Window
         foreach (TabState tab in unpinned) _tabs.Add(tab);
     }
 
-    private async void TabPin_Click(object sender, RoutedEventArgs e)
+    private void TabPin_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not FrameworkElement { Tag: TabState tab }) return;
 
@@ -804,7 +804,6 @@ public partial class MainWindow : Window
         StabilizePinned();
 
         ScheduleSessionSave();
-        await Task.CompletedTask;
     }
 
     // ---------- навигация ----------
