@@ -261,4 +261,6 @@
     <sys:String x:Key="L_PreviewPages">страниц: {0} из {1}</sys:String>
     <sys:String x:Key="L_PreviewTextStatus">текст</sys:String>
     <sys:String x:Key="L_MenuPreview">Предпросмотр</sys:String>
+    <sys:String x:Key="L_ModeName">По имени</sys:String>
+    <sys:String x:Key="L_ModeContent">По коду (в содержимом)</sys:String>
 </ResourceDictionary>

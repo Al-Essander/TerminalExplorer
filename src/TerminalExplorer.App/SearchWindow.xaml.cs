@@ -27,6 +27,10 @@ public partial class SearchWindow : Window
 
         // Стартуем с локального поиска: он не требует прав администратора и работает сразу.
         ScopeBox.SelectedIndex = 0;
+        // Поиск по имени по умолчанию — по коду переключается явно.
+        ModeBox.SelectedIndex = 0;
+
+        ModeBox.SelectionChanged += ModeBox_Changed;
 
         ResultList.ItemsSource = _results;
 
@@ -38,6 +42,9 @@ public partial class SearchWindow : Window
 
     private SearchScope CurrentScope =>
         ScopeBox.SelectedIndex == 1 ? SearchScope.AllDrives : SearchScope.Folder;
+
+    private SearchMode CurrentMode =>
+        ModeBox.SelectedIndex == 1 ? SearchMode.Content : SearchMode.Name;
 
     private void QueryBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
     {
@@ -70,18 +77,31 @@ public partial class SearchWindow : Window
         _ = RunSearchAsync(QueryBox.Text, CurrentScope);
     }
 
+    private void ModeBox_Changed(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+        if (!IsLoaded) return;
+
+        // По коду ищем только в текущей папке: MFT-индекс хранит имена, не содержимое.
+        if (CurrentMode == SearchMode.Content && CurrentScope == SearchScope.AllDrives)
+            ScopeBox.SelectedIndex = 0;
+
+        _debounce.Stop();
+        _ = RunSearchAsync(QueryBox.Text, CurrentScope);
+    }
+
     private async Task RunSearchAsync(string query, SearchScope scope)
     {
         _searchCts?.Cancel();
         var cts = new CancellationTokenSource();
         _searchCts = cts;
 
-        StatusText.Text = LanguageManager.Tr(scope == SearchScope.AllDrives ? "L_SearchingDrives" : "L_SearchingFolder");
+        StatusText.Text = LanguageManager.Tr(
+            scope == SearchScope.AllDrives ? "L_SearchingDrives" : "L_SearchingFolder");
 
         try
         {
             IReadOnlyList<SearchResult> found = await SearchService.SearchAsync(
-                query, scope, _rootFolder, cts.Token);
+                query, scope, CurrentMode, _rootFolder, cts.Token);
 
             if (cts.IsCancellationRequested) return;
 

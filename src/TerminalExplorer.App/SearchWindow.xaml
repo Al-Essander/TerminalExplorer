@@ -36,17 +36,23 @@
                         BorderThickness="0" Click="Close_Click"/>
             </Grid>
 
-            <!-- ШАПКА: поле запроса + переключатель области поиска -->
+            <!-- ШАПКА: поле запроса + переключатели области и режима поиска -->
             <Grid Grid.Row="1" Margin="14,12,14,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBox Grid.Column="0" x:Name="QueryBox"
                          FontFamily="{DynamicResource MonoFont}"
                          TextChanged="QueryBox_TextChanged"
                          KeyDown="QueryBox_KeyDown"/>
-                <ComboBox Grid.Column="1" x:Name="ScopeBox" Margin="8,0,0,0"
+                <ComboBox Grid.Column="1" x:Name="ModeBox" Margin="8,0,0,0"
+                          Width="170" SelectionChanged="ModeBox_Changed">
+                    <ComboBoxItem Content="{DynamicResource L_ModeName}"/>
+                    <ComboBoxItem Content="{DynamicResource L_ModeContent}"/>
+                </ComboBox>
+                <ComboBox Grid.Column="2" x:Name="ScopeBox" Margin="8,0,0,0"
                           Width="170" SelectionChanged="ScopeBox_Changed">
                     <ComboBoxItem Content="{DynamicResource L_ScopeFolder}"/>
                     <ComboBoxItem Content="{DynamicResource L_ScopeDrives}"/>
@@ -79,20 +85,27 @@
                                   ScrollViewer.CanContentScroll="True">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Margin="4,1,6,1">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="{Binding Name}"
+                                    <StackPanel Margin="4,1,6,1">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="{Binding Name}"
+                                                       Foreground="{DynamicResource Accent}"
+                                                       FontWeight="Bold"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding FullPath}"
+                                                       Margin="8,0,0,0"
+                                                       Foreground="{DynamicResource Dim}"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                        </Grid>
+                                        <TextBlock Text="{Binding Snippet}"
+                                                   Margin="20,2,0,0"
                                                    Foreground="{DynamicResource Accent}"
-                                                   FontWeight="Bold"
+                                                   FontFamily="{DynamicResource MonoFont}"
                                                    TextTrimming="CharacterEllipsis"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding FullPath}"
-                                                   Margin="8,0,0,0"
-                                                   Foreground="{DynamicResource Dim}"
-                                                   TextTrimming="CharacterEllipsis"/>
-                                    </Grid>
+                                    </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>

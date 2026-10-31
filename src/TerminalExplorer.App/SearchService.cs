@@ -5,7 +5,12 @@ using TerminalExplorer.Core;
 namespace TerminalExplorer;
 
 /// <summary>Один результат поиска: имя и полный путь.</summary>
-public sealed record SearchResult(string Name, string FullPath, bool IsDirectory);
+public sealed record SearchResult(
+    string Name,
+    string FullPath,
+    bool IsDirectory,
+    int Line = -1,
+    string? Snippet = null);
 
 /// <summary>Область поиска.</summary>
 public enum SearchScope
@@ -14,6 +19,15 @@ public enum SearchScope
     Folder,
     /// <summary>Все NTFS-тома через MFT; требует прав администратора.</summary>
     AllDrives,
+}
+
+/// <summary>Что ищем: имя файла/папки или содержимое файлов.</summary>
+public enum SearchMode
+{
+    /// <summary>Подстрока в имени.</summary>
+    Name,
+    /// <summary>Подстрока в тексте файла (по коду).</summary>
+    Content,
 }
 
 /// <summary>
@@ -27,16 +41,19 @@ public enum SearchScope
 public static class SearchService
 {
     /// <summary>
-    /// Ищет подстроку в имени файла/папки в пределах области.
+    /// Ищет подстроку в имени файла/папки или в содержимом файлов в пределах области.
     /// Запрашивает только имя и путь, размер и время не трогает — при миллионах записей
     /// лишние обращения к метаданным стоят дорого.
     /// </summary>
     public static async Task<IReadOnlyList<SearchResult>> SearchAsync(
-        string query, SearchScope scope, string rootFolder,
+        string query, SearchScope scope, SearchMode mode, string rootFolder,
         CancellationToken cancellation = default)
     {
         if (string.IsNullOrWhiteSpace(query))
             return [];
+
+        if (mode == SearchMode.Content)
+            return await SearchContentAsync(rootFolder, query, cancellation);
 
         return scope switch
         {
@@ -76,6 +93,89 @@ public static class SearchService
         }, cancellation);
 
         return results;
+    }
+
+    /// <summary>
+    /// Поиск подстроки в содержимом файлов под root. Ограничен текстовыми и кодовыми
+    /// расширениями (как предпросмотр), бинарники пропускаются. Возвращает файлы и строку
+    /// первого совпадения, чтобы результат был полезен (поиск по коду).
+    /// </summary>
+    private static async Task<IReadOnlyList<SearchResult>> SearchContentAsync(
+        string root, string query, CancellationToken cancellation)
+    {
+        if (!Directory.Exists(root)) return [];
+
+        var results = new List<SearchResult>();
+        var options = new EnumerationOptions
+        {
+            IgnoreInaccessible = true,
+            RecurseSubdirectories = true,
+            AttributesToSkip = 0,
+            ReturnSpecialDirectories = false,
+        };
+
+        // Размер ограничиваем — читать 6-гигабайтный файл не нужно.
+        const long MaxBytes = 4 * 1024 * 1024;
+
+        await Task.Run(() =>
+        {
+            foreach (string path in Directory.EnumerateFiles(root, "*", options))
+            {
+                cancellation.ThrowIfCancellationRequested();
+
+                string ext = Path.GetExtension(path);
+                if (!IsSearchableText(ext)) continue;
+
+                try
+                {
+                    var info = new FileInfo(path);
+                    if (info.Length > MaxBytes) continue;
+
+                    // Binary detection: нулевой байт почти наверняка значит «не текст».
+                    byte[] bytes = File.ReadAllBytes(path);
+                    if (bytes.Contains((byte)0)) continue;
+
+                    using var reader = new StreamReader(
+                        new MemoryStream(bytes),
+                        System.Text.Encoding.UTF8,
+                        detectEncodingFromByteOrderMarks: true);
+                    string text = reader.ReadToEnd();
+
+                    int index = text.IndexOf(query, StringComparison.OrdinalIgnoreCase);
+                    if (index < 0) continue;
+
+                    int line = 1 + text.AsSpan(0, index).Count('\n');
+                    results.Add(new SearchResult(
+                        Path.GetFileName(path),
+                        path,
+                        IsDirectory: false,
+                        Line: line,
+                        Snippet: MakeSnippet(text, index)));
+                }
+                catch (IOException) { }
+                catch (UnauthorizedAccessException) { }
+            }
+        }, cancellation);
+
+        return results;
+    }
+
+    /// <summary>Текстовые расширения, которые имеет смысл искать по содержимому.</summary>
+    private static bool IsSearchableText(string extension) => extension is
+        ".txt" or ".md" or ".markdown" or ".log" or ".ini" or ".cfg" or ".conf" or ".json" or ".xml"
+        or ".yaml" or ".yml" or ".csv" or ".tsv" or ".html" or ".htm" or ".css" or ".js" or ".ts"
+        or ".py" or ".c" or ".cpp" or ".h" or ".hpp" or ".java" or ".sh" or ".bat" or ".cmd"
+        or ".ps1" or ".sql";
+
+    /// <summary>Вырезает небольшой фрагмент вокруг совпадения для отображения в результате.</summary>
+    private static string MakeSnippet(string text, int index)
+    {
+        const int radius = 60;
+        int start = Math.Max(0, index - radius);
+        int length = Math.Min(text.Length - start, radius * 2);
+
+        string snippet = text.Substring(start, length).Replace('\r', ' ').Replace('\n', ' ');
+        return (start > 0 ? "…" : "") + snippet.Trim();
     }
 
     private static async Task<IReadOnlyList<SearchResult>> SearchAllDrivesAsync(
