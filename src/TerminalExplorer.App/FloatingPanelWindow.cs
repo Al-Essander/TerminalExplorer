@@ -33,6 +33,7 @@ internal sealed class FloatingPanelWindow : Window
         // Окно всегда поверх остальных, как просит «поверх других» в паспорте фичи.
         Topmost = true;
         WindowStyle = WindowStyle.None;
+        AllowsTransparency = true;
         FontFamily = (FontFamily)Application.Current.Resources["MonoFont"];
         Background = (Brush)Application.Current.Resources["Background"];
 
@@ -99,6 +100,8 @@ internal sealed class FloatingPanelWindow : Window
         {
             BorderBrush = (Brush)Application.Current.Resources["Border"],
             BorderThickness = new Thickness(1),
+            Margin = new Thickness(18),
+            Effect = (System.Windows.Media.Effects.Effect)Application.Current.Resources["WindowShadow"],
             Child = host,
         };
 

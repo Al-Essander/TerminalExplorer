@@ -15,6 +15,11 @@
     <system:Double x:Key="TabMaxWidth">150</system:Double>
     <Thickness x:Key="TabPadding">10,0,6,0</Thickness>
 
+    <!-- Тень всплывающих окон (диалогов) в стиле «старый Windows»: мягкое затемнение по краю. -->
+    <DropShadowEffect x:Key="WindowShadow"
+                      BlurRadius="18" ShadowDepth="0" Direction="270"
+                      Color="#80000000" Opacity="0.55"/>
+
     <!-- Флажок и ползунок: без своих шаблонов они приходят системными светлыми. -->
     <Style TargetType="CheckBox">
         <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>

@@ -5,10 +5,11 @@
         Title="НАСТРОЙКИ"
         Height="620" Width="520"
         WindowStartupLocation="CenterOwner"
-        Background="{DynamicResource Background}"
+        Background="Transparent"
         UseLayoutRounding="True"
         TextOptions.TextFormattingMode="Display"
         WindowStyle="None"
+        AllowsTransparency="True"
         ResizeMode="CanResize">
 
     <shell:WindowChrome.WindowChrome>
@@ -31,7 +32,10 @@
         </Style>
     </Window.Resources>
 
-    <Border BorderBrush="{DynamicResource Border}" BorderThickness="1">
+    <Border BorderBrush="{DynamicResource Border}" BorderThickness="1"
+            Background="{DynamicResource Background}"
+            Margin="18"
+            Effect="{StaticResource WindowShadow}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="26"/>

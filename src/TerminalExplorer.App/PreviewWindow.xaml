@@ -9,7 +9,8 @@
         Background="{DynamicResource Background}"
         UseLayoutRounding="True"
         TextOptions.TextFormattingMode="Display"
-        WindowStyle="None" ResizeMode="CanResize">
+        WindowStyle="None" ResizeMode="CanResize"
+        AllowsTransparency="True">
 
     <shell:WindowChrome.WindowChrome>
         <shell:WindowChrome CaptionHeight="0" ResizeBorderThickness="5"
@@ -17,7 +18,10 @@
                             UseAeroCaptionButtons="False"/>
     </shell:WindowChrome.WindowChrome>
 
-    <Border BorderBrush="{DynamicResource Border}" BorderThickness="1">
+    <Border BorderBrush="{DynamicResource Border}" BorderThickness="1"
+            Background="{DynamicResource Background}"
+            Margin="18"
+            Effect="{StaticResource WindowShadow}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="26"/>
