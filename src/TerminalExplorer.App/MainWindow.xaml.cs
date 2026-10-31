@@ -21,6 +21,13 @@ public partial class MainWindow : Window
     // --- открепляемые панели («поверх других»), управляется флагом FloatingPanels ---
     private FloatingPanelWindow? _floatingTerminal;
     private FloatingPanelWindow? _floatingDetails;
+    // Конкретное дерево терминала, откреплённое в плавающее окно. Нужно, чтобы вернуть
+    // в док именно его, а не «текущую активную вкладку» — при переключении вкладок
+    // _active уже указывает на новую, и возврат по нему оставил бы старый вид осиротевшим.
+    private Terminal.TerminalView? _floatingView;
+    // Вкладка, чей терминал откреплён: при закрытии её нужно сбросить флоат-состояние,
+    // иначе плавающее окно останется с уже освобождённым (терминал закрыт) деревом.
+    private TabState? _floatingTerminalTab;
 
     /// <summary>
     /// Отменяет предыдущую загрузку. Без этого быстрое переключение вкладок приводит
@@ -631,6 +638,14 @@ public partial class MainWindow : Window
 
         SaveSession();
 
+        // Откреплённые окна принадлежат этому окну (Owner) и закроются вместе с ним.
+        // Сбрасываем флоат-состояние до закрытия: их OnClosed вызывает DockPanel, который
+        // не должен пытаться вернуть уже освобождаемое дерево терминала.
+        _floatingTerminal = null;
+        _floatingView = null;
+        _floatingTerminalTab = null;
+        _floatingDetails = null;
+
         foreach (TabState tab in _tabs) tab.Session?.Dispose();
 
         base.OnClosing(e);
@@ -678,6 +693,18 @@ public partial class MainWindow : Window
         _recent.Remove(tab);
         DisposeTerminal(tab);
         Sounds.Play(Sounds.TabClose);
+
+        // Закрыли вкладку, чей терминал был откреплён, — окно закрываем и сбрасываем флоат.
+        // Поля обнуляем ДО закрытия: Close() подожжёт DockRequested (OnClosed), и там
+        // _floatingTerminal должен быть уже null, чтобы не вернуть освобождённый вид.
+        if (ReferenceEquals(tab, _floatingTerminalTab))
+        {
+            FloatingPanelWindow? toClose = _floatingTerminal;
+            _floatingTerminal = null;
+            _floatingView = null;
+            _floatingTerminalTab = null;
+            toClose?.Close();
+        }
 
         if (ReferenceEquals(tab, _active))
             await ActivateTabAsync(_recent.FirstOrDefault(_tabs.Contains) ?? _tabs[Math.Min(index, _tabs.Count - 1)]);
@@ -1121,6 +1148,8 @@ public partial class MainWindow : Window
             _floatingTerminal = window;
 
             // Переносим дерево терминала в плавающее окно.
+            _floatingView = view;
+            _floatingTerminalTab = _active;
             if (view is not null)
             {
                 if (view.Parent is Border placeholder) placeholder.Child = null;
@@ -1156,14 +1185,17 @@ public partial class MainWindow : Window
         {
             if (_floatingTerminal is not { } window) return;
 
-            // Возвращаем дерево терминала обратно в доковый хост.
-            if (_active?.TermView is { } view)
+            // Возвращаем в док именно откреплённый вид, а не текущую активную вкладку:
+            // при переключении вкладок она уже другая.
+            if (_floatingView is { } view)
             {
                 if (view.Parent is Grid body) body.Children.Remove(view);
                 TerminalHost.Child = view;
                 TerminalHost.UpdateLayout();
             }
 
+            _floatingView = null;
+            _floatingTerminalTab = null;
             _floatingTerminal = null;
             window.Close();
         }
