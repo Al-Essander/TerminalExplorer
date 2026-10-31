@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using System.Numerics;
-using MftProbe;
+using TerminalExplorer.Core;
 
 // Бенчмарк ядра. Проверяет две гипотезы проекта:
 //   1. том целиком индексируется через MFT за секунды, а не за минуты;

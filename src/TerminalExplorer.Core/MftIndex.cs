@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32.SafeHandles;
 
-namespace MftProbe;
+namespace TerminalExplorer.Core;
 
 /// <summary>
 /// Индекс имён одного NTFS-тома, построенный прямым перечислением MFT.
@@ -218,6 +218,13 @@ public sealed partial class MftIndex
     {
         ref readonly Entry e = ref _entries[index];
         return _names.AsSpan(e.NameOffset, e.NameLength);
+    }
+
+    /// <summary>Является ли запись каталогом. Для UI: папки и файлы выглядят по-разному.</summary>
+    public bool IsDirectoryAt(int index)
+    {
+        if ((uint)index >= (uint)_entryCount) return false;
+        return _entries[index].IsDirectory;
     }
 
     /// <summary>

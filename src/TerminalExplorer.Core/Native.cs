@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 
-namespace MftProbe;
+namespace TerminalExplorer.Core;
 
 /// <summary>
 /// P/Invoke-обёртки, нужные для перечисления MFT. Только kernel32, сторонних библиотек нет.

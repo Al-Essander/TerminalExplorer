@@ -14,4 +14,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\TerminalExplorer.Core\TerminalExplorer.Core.csproj" />
+  </ItemGroup>
+
 </Project>

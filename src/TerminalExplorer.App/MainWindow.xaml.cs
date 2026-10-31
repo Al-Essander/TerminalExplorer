@@ -524,6 +524,20 @@ public partial class MainWindow : Window
         LoadDrives();
     }
 
+    /// <summary>Открывает окно поиска (Ctrl+F или кнопка «?»).</summary>
+    private void Search_Click(object sender, RoutedEventArgs e) => OpenSearch();
+
+    private void OpenSearch()
+    {
+        // Поиск может быть долгим, поэтому окно модельное: владелец не должен дёргать
+        // общий индекс, пока там идёт скан. Сам поиск при этом не блокирует UI.
+        var window = new SearchWindow(_active?.Path ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile))
+        {
+            Owner = this,
+        };
+        window.ShowDialog();
+    }
+
     // ---------- сессия ----------
 
     private async Task RestoreSessionAsync()
@@ -1543,6 +1557,11 @@ public partial class MainWindow : Window
             case Key.F2:
                 e.Handled = true;
                 await RenameSelectedAsync();
+                break;
+
+            case Key.F when control:
+                e.Handled = true;
+                OpenSearch();
                 break;
 
             case Key.C when control:

@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace MftProbe;
+namespace TerminalExplorer.Core;
 
 /// <summary>
 /// Сигнатуры n-грамм — фильтр Блума, построенный над множеством n-грамм внутри каждого имени.

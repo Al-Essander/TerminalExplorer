@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace MftProbe;
+namespace TerminalExplorer.Core;
 
 /// <summary>
 /// Лог процесса с двумя скоростями подачи.
