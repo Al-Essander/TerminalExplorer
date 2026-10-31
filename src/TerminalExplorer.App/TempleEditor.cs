@@ -37,6 +37,9 @@ public sealed class TempleEditor : Border
     private readonly TextBox _find = new();
     private readonly Border _findBar = new();
 
+    // Подсветка синтаксиса: текст дублируется в неактивный TextBlock под прозрачным TextBox.
+    private readonly TextBlock _highlight = new();
+
     private string? _path;
     private bool _dirty;
     private bool _loading;
@@ -114,7 +117,8 @@ public sealed class TempleEditor : Border
         Grid.SetRow(_findBar, 1);
         grid.Children.Add(_findBar);
 
-        // Само поле правки.
+        // Само поле правки. Текст дублируется в неактивный TextBlock (_highlight) под
+        // прозрачным TextBox: так подсветка синтаксиса не требует переписывать редактор.
         StyleBox(_editor, Blue, Yellow);
         _editor.AcceptsReturn = true;
         _editor.AcceptsTab = true;
@@ -124,11 +128,51 @@ public sealed class TempleEditor : Border
         _editor.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
         _editor.FontSize = 16;
         _editor.Padding = new Thickness(8, 4, 8, 4);
-        _editor.TextChanged += (_, _) => { if (!_loading) MarkDirty(); };
+        _editor.TextChanged += (_, _) =>
+        {
+            if (_loading) return;
+            MarkDirty();
+            HighlightText();
+        };
         _editor.SelectionChanged += (_, _) => UpdateStatus();
         _editor.PreviewKeyDown += EditorKeyDown;
-        Grid.SetRow(_editor, 2);
-        grid.Children.Add(_editor);
+
+        // Нижний слой с цветными фрагментами кода.
+        _highlight.FontFamily = new FontFamily("Consolas, Courier New");
+        _highlight.FontSize = 16;
+        _highlight.TextWrapping = TextWrapping.NoWrap;
+        _highlight.Padding = new Thickness(8, 4, 8, 4);
+        _highlight.Margin = new Thickness(0);
+
+        var highlightScroll = new ScrollViewer
+        {
+            HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
+            VerticalScrollBarVisibility = ScrollBarVisibility.Hidden,
+            IsHitTestVisible = false,
+            Content = _highlight,
+        };
+
+        var editorHost = new Grid { Background = Brush(Blue) };
+        editorHost.Children.Add(highlightScroll);
+        editorHost.Children.Add(_editor);
+        // Прозрачный фон и текст редактора — чтобы просвечивал _highlight с цветными
+        // фрагментами. Каретка (White) и выделение (LightBlue) рисуются отдельно и видны.
+        _editor.Background = Brushes.Transparent;
+        _editor.Foreground = Brushes.Transparent;
+
+        // Синхронизация прокрутки: внутренний ScrollViewer редактора и слой подсветки
+        // должны двигаться вместе, иначе цвета «уедут» от текста.
+        _editor.AddHandler(ScrollViewer.ScrollChangedEvent, new ScrollChangedEventHandler((_, e) =>
+        {
+            if (e.OriginalSource is ScrollViewer sv)
+            {
+                highlightScroll.ScrollToHorizontalOffset(sv.HorizontalOffset);
+                highlightScroll.ScrollToVerticalOffset(sv.VerticalOffset);
+            }
+        }));
+
+        Grid.SetRow(editorHost, 2);
+        grid.Children.Add(editorHost);
 
         // Статусная строка.
         _status.Foreground = Brush(Blue);
@@ -225,6 +269,7 @@ public sealed class TempleEditor : Border
             _editor.IsReadOnly = _readOnly;
             _editor.CaretIndex = 0;
             _editor.ScrollToHome();
+            HighlightText();
             _loading = false;
             _dirty = false;
 
@@ -287,6 +332,7 @@ public sealed class TempleEditor : Border
         _dirty = false;
         _loading = true;
         _editor.Clear();
+        _highlight.Inlines.Clear();
         _loading = false;
 
         Closed?.Invoke();
@@ -294,6 +340,16 @@ public sealed class TempleEditor : Border
     }
 
     public void FocusEditor() => _editor.Focus();
+
+    /// <summary>Перерисовывает подсветку синтаксиса для текущего текста и расширения.</summary>
+    private void HighlightText()
+    {
+        string extension = System.IO.Path.GetExtension(_path ?? string.Empty);
+        if (SyntaxHighlighter.IsCode(extension) && _editor.Text.Length > 0)
+            SyntaxHighlighter.Highlight(_editor.Text, _highlight);
+        else
+            _highlight.Inlines.Clear();
+    }
 
     // ---------- интерфейс ----------
 
