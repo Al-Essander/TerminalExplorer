@@ -214,4 +214,38 @@
     <sys:String x:Key="L_ReadOnlySuffix">  [read-only]</sys:String>
     <sys:String x:Key="L_EditorStatus">Line {0}  Col {1}   |   Ctrl+S save   Ctrl+F find   Esc close</sys:String>
     <sys:String x:Key="L_NotFound">not found: {0}</sys:String>
+
+    <!-- Main window status messages -->
+    <sys:String x:Key="L_StatusFavorite">added to favorites: {0}</sys:String>
+    <sys:String x:Key="L_StatusAlreadyFavorite">already in favorites: {0}</sys:String>
+    <sys:String x:Key="L_FolderUnavailable">folder unavailable: {0}</sys:String>
+    <sys:String x:Key="L_ShellMenuUnavailable">Windows menu unavailable</sys:String>
+    <sys:String x:Key="L_AddonNeedsFolder">the add-on needs an open folder</sys:String>
+    <sys:String x:Key="L_AddonStarted">add-on started: {0}</sys:String>
+    <sys:String x:Key="L_UnknownBuiltinAddon">unknown built-in add-on: {0}</sys:String>
+    <sys:String x:Key="L_InvalidPath">invalid path: {0}</sys:String>
+    <sys:String x:Key="L_NotAFolder">this is a file, not a folder: {0}</sys:String>
+    <sys:String x:Key="L_FolderNotFound">folder not found: {0}</sys:String>
+    <sys:String x:Key="L_Reading">reading...</sys:String>
+    <sys:String x:Key="L_StatusEditing">editing: {0}</sys:String>
+    <sys:String x:Key="L_AccessDenied">access denied: {0}</sys:String>
+    <sys:String x:Key="L_ReadError">read error: {0}</sys:String>
+    <sys:String x:Key="L_OpenError">could not open: {0}</sys:String>
+    <sys:String x:Key="L_NothingToMove">nothing to move: objects are already in this folder</sys:String>
+    <sys:String x:Key="L_Moved">moved: {0}</sys:String>
+    <sys:String x:Key="L_Copied">copied: {0}</sys:String>
+    <sys:String x:Key="L_SelectObject">select an object</sys:String>
+    <sys:String x:Key="L_NameTaken">name already taken: {0}</sys:String>
+    <sys:String x:Key="L_Renamed">renamed: {0}</sys:String>
+    <sys:String x:Key="L_RenameError">could not rename: {0}</sys:String>
+    <sys:String x:Key="L_Cut">cut: {0}</sys:String>
+    <sys:String x:Key="L_ClipboardBusy">clipboard busy: {0}</sys:String>
+    <sys:String x:Key="L_ClipboardEmpty">no files in clipboard</sys:String>
+    <sys:String x:Key="L_NothingToPaste">nothing to paste: objects are already here</sys:String>
+    <sys:String x:Key="L_OperationCancelled">operation cancelled</sys:String>
+    <sys:String x:Key="L_PasteError">could not paste: {0}</sys:String>
+    <sys:String x:Key="L_CopyPath">copied: {0}</sys:String>
+    <sys:String x:Key="L_PropertiesError">could not open properties</sys:String>
+    <sys:String x:Key="L_ThemeStatus">theme: {0}   (F9 — switch)</sys:String>
+    <sys:String x:Key="L_ScaleStatus">scale: {0} pt   (Ctrl+0 — reset)</sys:String>
 </ResourceDictionary>

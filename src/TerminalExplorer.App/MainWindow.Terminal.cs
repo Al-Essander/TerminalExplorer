@@ -315,7 +315,7 @@ public partial class MainWindow
 
         ToggleTerminalMaximized(false);
         _focusBeforeEditor = Keyboard.FocusedElement as Control;
-        SetStatus("правка: " + entry.FullPath);
+        SetStatus(string.Format(LanguageManager.Tr("L_StatusEditing"), entry.FullPath));
     }
 
     private void Editor_Closed()

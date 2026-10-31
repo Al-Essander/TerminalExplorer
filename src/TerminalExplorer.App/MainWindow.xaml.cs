@@ -155,8 +155,8 @@ public partial class MainWindow : Window
         if (_active is null) return;
 
         SetStatus(Favorites.Add(_active.Path)
-            ? "в избранное: " + _active.Path
-            : "уже в избранном: " + _active.Path);
+            ? string.Format(LanguageManager.Tr("L_StatusFavorite"), _active.Path)
+            : string.Format(LanguageManager.Tr("L_StatusAlreadyFavorite"), _active.Path));
     }
 
     private async void Favorite_Click(object sender, RoutedEventArgs e)
@@ -169,7 +169,7 @@ public partial class MainWindow : Window
         if (!Directory.Exists(item.Path))
         {
             // Папку могли удалить или это съёмный диск — сообщаем, но из списка не выбрасываем.
-            ReportError("папка недоступна: " + item.Path);
+            ReportError(string.Format(LanguageManager.Tr("L_FolderUnavailable"), item.Path));
             return;
         }
 
@@ -234,7 +234,9 @@ public partial class MainWindow : Window
     {
         if (MenuTarget<string>(sender) is not { } path) return;
 
-        SetStatus(Favorites.Add(path) ? "в избранное: " + path : "уже в избранном: " + path);
+        SetStatus(Favorites.Add(path)
+            ? string.Format(LanguageManager.Tr("L_StatusFavorite"), path)
+            : string.Format(LanguageManager.Tr("L_StatusAlreadyFavorite"), path));
     }
 
     private void DriveMenuTerminal_Click(object sender, RoutedEventArgs e)
@@ -253,7 +255,9 @@ public partial class MainWindow : Window
         string? path = Selected is { IsDirectory: true } entry ? entry.FullPath : _active?.Path;
         if (path is null) return;
 
-        SetStatus(Favorites.Add(path) ? "в избранное: " + path : "уже в избранном: " + path);
+        SetStatus(Favorites.Add(path)
+            ? string.Format(LanguageManager.Tr("L_StatusFavorite"), path)
+            : string.Format(LanguageManager.Tr("L_StatusAlreadyFavorite"), path));
     }
 
     // ---------- меню оболочки ----------
@@ -312,7 +316,7 @@ public partial class MainWindow : Window
 
         if (!shown)
         {
-            SetStatus("меню Windows недоступно");
+            SetStatus(LanguageManager.Tr("L_ShellMenuUnavailable"));
             return;
         }
 
@@ -490,7 +494,7 @@ public partial class MainWindow : Window
 
         if (addon.RequiresFolder && folder is null)
         {
-            ReportError("аддону нужна открытая папка");
+            ReportError(LanguageManager.Tr("L_AddonNeedsFolder"));
             return;
         }
 
@@ -502,7 +506,7 @@ public partial class MainWindow : Window
 
         string? error = AddonManager.Run(addon, folder!, Selected?.FullPath);
 
-        if (error is null) SetStatus("запущен аддон: " + addon.Name);
+        if (error is null) SetStatus(string.Format(LanguageManager.Tr("L_AddonStarted"), addon.Name));
         else ReportError(addon.Name + ": " + error);
     }
 
@@ -519,7 +523,7 @@ public partial class MainWindow : Window
                 break;
 
             default:
-                ReportError("неизвестный встроенный аддон: " + addon.Id);
+                ReportError(string.Format(LanguageManager.Tr("L_UnknownBuiltinAddon"), addon.Id));
                 break;
         }
     }
@@ -695,15 +699,15 @@ public partial class MainWindow : Window
         }
         catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
         {
-            ReportError("недопустимый путь: " + path);
+            ReportError(string.Format(LanguageManager.Tr("L_InvalidPath"), path));
             return;
         }
 
         if (!Directory.Exists(path))
         {
             ReportError(File.Exists(path)
-                ? "это файл, а не папка: " + path
-                : "папка не найдена: " + path);
+                ? string.Format(LanguageManager.Tr("L_NotAFolder"), path)
+                : string.Format(LanguageManager.Tr("L_FolderNotFound"), path));
             return;
         }
 
@@ -746,7 +750,7 @@ public partial class MainWindow : Window
         ScheduleSessionSave();
         ScheduleTerminalSync();
         PromptText.Text = " " + (Path.GetPathRoot(tab.Path) ?? "C:\\").TrimEnd('\\') + "\\> ";
-        SetStatus("чтение...");
+        SetStatus(LanguageManager.Tr("L_Reading"));
 
         try
         {
@@ -784,11 +788,11 @@ public partial class MainWindow : Window
         }
         catch (UnauthorizedAccessException)
         {
-            SetStatus("отказано в доступе: " + tab.Path);
+            SetStatus(string.Format(LanguageManager.Tr("L_AccessDenied"), tab.Path));
         }
         catch (IOException ex)
         {
-            SetStatus("ошибка чтения: " + ex.Message);
+            SetStatus(string.Format(LanguageManager.Tr("L_ReadError"), ex.Message));
         }
     }
 
@@ -967,7 +971,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            SetStatus("не удалось открыть: " + ex.Message);
+            SetStatus(string.Format(LanguageManager.Tr("L_OpenError"), ex.Message));
             Sounds.Play(Sounds.Error);
         }
     }
@@ -1094,7 +1098,7 @@ public partial class MainWindow : Window
 
         if (sources.Length == 0)
         {
-            SetStatus("нечего переносить: объекты уже в этой папке");
+            SetStatus(LanguageManager.Tr("L_NothingToMove"));
             return;
         }
 
@@ -1103,8 +1107,8 @@ public partial class MainWindow : Window
             : FileOperations.Copy(sources, destination, new WindowInteropHelper(this).Handle);
 
         SetStatus(done
-            ? (move ? "перемещено: " : "скопировано: ") + sources.Length
-            : "операция отменена или завершилась с ошибкой");
+            ? string.Format(LanguageManager.Tr(move ? "L_Moved" : "L_Copied"), sources.Length)
+            : LanguageManager.Tr("L_OperationCancelled"));
 
         await LoadCurrentAsync(recordHistory: false);
     }
@@ -1139,7 +1143,7 @@ public partial class MainWindow : Window
     /// </summary>
     private async Task RenameSelectedAsync()
     {
-        if (Selected is not { } entry) { SetStatus("выберите объект"); return; }
+        if (Selected is not { } entry) { SetStatus(LanguageManager.Tr("L_SelectObject")); return; }
 
         var dialog = new RenameWindow(entry.Name, entry.IsDirectory) { Owner = this };
         if (dialog.ShowDialog() != true) return;
@@ -1152,19 +1156,19 @@ public partial class MainWindow : Window
         {
             if (File.Exists(target) || Directory.Exists(target))
             {
-                ReportError("такое имя уже занято: " + dialog.NewName);
+                ReportError(string.Format(LanguageManager.Tr("L_NameTaken"), dialog.NewName));
                 return;
             }
 
             if (entry.IsDirectory) Directory.Move(entry.FullPath, target);
             else File.Move(entry.FullPath, target);
 
-            SetStatus("переименовано: " + dialog.NewName);
+            SetStatus(string.Format(LanguageManager.Tr("L_Renamed"), dialog.NewName));
             await LoadCurrentAsync(recordHistory: false);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            ReportError("не удалось переименовать: " + ex.Message);
+            ReportError(string.Format(LanguageManager.Tr("L_RenameError"), ex.Message));
         }
     }
 
@@ -1191,11 +1195,11 @@ public partial class MainWindow : Window
             data.SetData("Preferred DropEffect", effect);
 
             Clipboard.SetDataObject(data, copy: true);
-            SetStatus((cut ? "вырезано: " : "скопировано: ") + paths.Count);
+            SetStatus(string.Format(LanguageManager.Tr(cut ? "L_Cut" : "L_Copied"), paths.Count));
         }
         catch (Exception ex)
         {
-            ReportError("буфер обмена занят: " + ex.Message);
+            ReportError(string.Format(LanguageManager.Tr("L_ClipboardBusy"), ex.Message));
         }
     }
 
@@ -1205,7 +1209,7 @@ public partial class MainWindow : Window
 
         try
         {
-            if (!Clipboard.ContainsFileDropList()) { SetStatus("в буфере нет файлов"); return; }
+            if (!Clipboard.ContainsFileDropList()) { SetStatus(LanguageManager.Tr("L_ClipboardEmpty")); return; }
 
             string[] sources = [.. Clipboard.GetFileDropList().Cast<string>().Where(path => path is not null)];
             if (sources.Length == 0) return;
@@ -1214,7 +1218,7 @@ public partial class MainWindow : Window
             string destination = _active.Path;
 
             string[] filtered = sources.Where(path => IsDroppable(path, destination, cut)).ToArray();
-            if (filtered.Length == 0) { SetStatus("нечего вставлять: объекты уже здесь"); return; }
+            if (filtered.Length == 0) { SetStatus(LanguageManager.Tr("L_NothingToPaste")); return; }
 
             nint owner = new WindowInteropHelper(this).Handle;
 
@@ -1222,7 +1226,9 @@ public partial class MainWindow : Window
                 ? FileOperations.Move(filtered, destination, owner)
                 : FileOperations.Copy(filtered, destination, owner);
 
-            SetStatus(done ? (cut ? "перемещено: " : "скопировано: ") + filtered.Length : "операция отменена");
+            SetStatus(done
+            ? string.Format(LanguageManager.Tr(cut ? "L_Moved" : "L_Copied"), filtered.Length)
+            : LanguageManager.Tr("L_OperationCancelled"));
 
             // После вырезания буфер очищается: повторная вставка перенесла бы то,
             // чего на прежнем месте уже нет.
@@ -1232,7 +1238,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex) when (ex is ExternalException or IOException)
         {
-            ReportError("не удалось вставить: " + ex.Message);
+            ReportError(string.Format(LanguageManager.Tr("L_PasteError"), ex.Message));
         }
     }
 
@@ -1306,12 +1312,12 @@ public partial class MainWindow : Window
         {
             // В кавычках — так путь сразу пригоден для вставки в командную строку.
             Clipboard.SetText("\"" + path + "\"");
-            SetStatus("скопировано: " + path);
+            SetStatus(string.Format(LanguageManager.Tr("L_CopyPath"), path));
         }
         catch (Exception ex)
         {
             // Буфер обмена может быть занят другим процессом — это штатная ситуация Windows.
-            ReportError("буфер обмена занят: " + ex.Message);
+            ReportError(string.Format(LanguageManager.Tr("L_ClipboardBusy"), ex.Message));
         }
     }
 
@@ -1334,7 +1340,7 @@ public partial class MainWindow : Window
 
         nint handle = new WindowInteropHelper(this).Handle;
         if (!ShellActions.ShowProperties(path, handle))
-            SetStatus("не удалось открыть свойства");
+            SetStatus(LanguageManager.Tr("L_PropertiesError"));
     }
 
     // ---------- статус ----------
@@ -1570,7 +1576,7 @@ public partial class MainWindow : Window
                 ThemeManager.Next();
                 AppSettings.Current.ThemeIndex = ThemeManager.Current;
                 AppSettings.Current.Save();
-                SetStatus("тема: " + ThemeManager.CurrentName + "   (F9 — переключить)");
+                SetStatus(string.Format(LanguageManager.Tr("L_ThemeStatus"), ThemeManager.CurrentName));
                 break;
 
             case Key.F10:
@@ -1687,7 +1693,7 @@ public partial class MainWindow : Window
         AppSettings.Current.ApplyToResources();
         AppSettings.Current.Save();
 
-        SetStatus("масштаб: " + size.ToString("F0") + " пт   (Ctrl+0 — сбросить)");
+        SetStatus(string.Format(LanguageManager.Tr("L_ScaleStatus"), size.ToString("F0")));
     }
 
     /// <summary>Ctrl + колесо — тот же масштаб, привычный по браузерам и редакторам.</summary>

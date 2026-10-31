@@ -214,4 +214,37 @@
     <sys:String x:Key="L_ReadOnlySuffix">  [только чтение]</sys:String>
     <sys:String x:Key="L_EditorStatus">Стр {0}  Кол {1}   |   Ctrl+S сохранить   Ctrl+F найти   Esc закрыть</sys:String>
     <sys:String x:Key="L_NotFound">не найдено: {0}</sys:String>
+
+    <!-- Статусные сообщения главного окна -->
+    <sys:String x:Key="L_StatusFavorite">в избранное: {0}</sys:String>
+    <sys:String x:Key="L_StatusAlreadyFavorite">уже в избранном: {0}</sys:String>
+    <sys:String x:Key="L_FolderUnavailable">папка недоступна: {0}</sys:String>
+    <sys:String x:Key="L_ShellMenuUnavailable">меню Windows недоступно</sys:String>
+    <sys:String x:Key="L_AddonNeedsFolder">аддону нужна открытая папка</sys:String>
+    <sys:String x:Key="L_AddonStarted">запущен аддон: {0}</sys:String>
+    <sys:String x:Key="L_UnknownBuiltinAddon">неизвестный встроенный аддон: {0}</sys:String>
+    <sys:String x:Key="L_InvalidPath">недопустимый путь: {0}</sys:String>
+    <sys:String x:Key="L_NotAFolder">это файл, а не папка: {0}</sys:String>
+    <sys:String x:Key="L_FolderNotFound">папка не найдена: {0}</sys:String>
+    <sys:String x:Key="L_StatusEditing">правка: {0}</sys:String>
+    <sys:String x:Key="L_AccessDenied">отказано в доступе: {0}</sys:String>
+    <sys:String x:Key="L_ReadError">ошибка чтения: {0}</sys:String>
+    <sys:String x:Key="L_OpenError">не удалось открыть: {0}</sys:String>
+    <sys:String x:Key="L_NothingToMove">нечего переносить: объекты уже в этой папке</sys:String>
+    <sys:String x:Key="L_Moved">перемещено: {0}</sys:String>
+    <sys:String x:Key="L_Copied">скопировано: {0}</sys:String>
+    <sys:String x:Key="L_SelectObject">выберите объект</sys:String>
+    <sys:String x:Key="L_NameTaken">такое имя уже занято: {0}</sys:String>
+    <sys:String x:Key="L_Renamed">переименовано: {0}</sys:String>
+    <sys:String x:Key="L_RenameError">не удалось переименовать: {0}</sys:String>
+    <sys:String x:Key="L_Cut">вырезано: {0}</sys:String>
+    <sys:String x:Key="L_ClipboardBusy">буфер обмена занят: {0}</sys:String>
+    <sys:String x:Key="L_ClipboardEmpty">в буфере нет файлов</sys:String>
+    <sys:String x:Key="L_NothingToPaste">нечего вставлять: объекты уже здесь</sys:String>
+    <sys:String x:Key="L_OperationCancelled">операция отменена</sys:String>
+    <sys:String x:Key="L_PasteError">не удалось вставить: {0}</sys:String>
+    <sys:String x:Key="L_CopyPath">скопировано: {0}</sys:String>
+    <sys:String x:Key="L_PropertiesError">не удалось открыть свойства</sys:String>
+    <sys:String x:Key="L_ThemeStatus">тема: {0}   (F9 — переключить)</sys:String>
+    <sys:String x:Key="L_ScaleStatus">масштаб: {0} пт   (Ctrl+0 — сбросить)</sys:String>
 </ResourceDictionary>
