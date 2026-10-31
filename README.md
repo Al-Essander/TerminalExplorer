@@ -1,151 +1,164 @@
 # Terminal Explorer
 
-Файловый менеджер для Windows 11 в стилистике MS-DOS. Ноль сторонних зависимостей:
-только .NET BCL и P/Invoke к системным библиотекам.
+A file manager for **Windows 11** in the style of **MS-DOS / Far Manager**. Zero third-party
+dependencies: only the .NET BCL and P/Invoke to system libraries.
 
-Рабочее название. Спецификация — в паспорте проекта, принятые архитектурные решения
-и расхождения с ним — в [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Working title. The specification lives in the project passport; the accepted architecture
+decisions and deviations from it are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-## Состояние
+## Status
 
-**Ядро** (`tools/MftProbe`) — проверено, результаты в [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
-Индексация тома через MFT: 1,2 млн записей за 3,5 с. Поиск подстроки с фильтром
-биграммных сигнатур: от 0,8 мс.
+This is an **early, functional prototype**. It builds and runs, but has **not yet been
+extensively tested**. Feedback and bug reports are welcome.
 
-**Оболочка** (`src/TerminalExplorer.App`) — работает каркас:
+## AI assistance
 
-- вкладки с сохранением сессии между запусками (у каждой своя история навигации)
-- навигация: адресная строка, назад/вперёд/вверх, боковые кнопки мыши, Alt+←/→
-- список с виртуализацией, системные иконки, сортировка по любой колонке
-- **настоящее контекстное меню Windows** через `IContextMenu` — «Создать», «Открыть с помощью»
-  и пункты установленных программ; своё меню осталось на `Ctrl+ПКМ`
-- перетаскивание файлов внутрь и наружу, удаление в Корзину
-- контекстные меню дисков и избранного, панель закреплённых аддонов
-- четыре палитры: Спокойная, MS-DOS, Классика, Пользовательская (с HSV-палитрой)
-- **панель сведений** (`F12`): дерево папки, карта типов, распределение размеров,
-  проверка закона Бенфорда, стоимость обхода и живой индикатор активности ФС
-- аддоны: [бланк для своих](examples/addon-template) и генератор структуры папок
+This project was built **with AI assistance** — the code was generated and reviewed by AI
+coding agents. The **core search idea**, an *n-gram signature (Bloom-like) filter* for fast
+substring search across an entire NTFS volume, is adapted from my coursework project:
 
-- **Blender**: превью сцены и состав файла читаются прямо из `.blend`, без запуска Blender
-- переименование, буфер обмена, масштабирование, автообновление папки при изменениях извне
+**[2026-Coursework — Adaptive multi-criteria filtering in structured catalogs with
+heterogeneous parameters](https://github.com/Al-Essander/2026-Coursework)**
 
-Ещё не сделано: поиск по индексу MFT (ядро пока не подключено к оболочке), эскизы обычных
-файлов, места WSL и облачных папок, режимы просмотра кроме таблицы.
+## What's implemented
 
-## Формат .blend
+**Core** (`tools/MftProbe`) — verified on a real drive, results in
+[docs/BENCHMARKS.md](docs/BENCHMARKS.md). Whole-volume indexing through the MFT: 1.2M records
+in ~3.5 s. Substring search with a bigram-signature filter: from 0.8 ms.
 
-Разобран по реальным файлам — в открытых описаниях этой раскладки нет, потому что
-в новых версиях Blender она изменилась.
+**Shell** (`src/TerminalExplorer.App`) — working frame:
 
-| | Старый формат | Новый (Blender 4+) |
-|---|---|---|
-| Заголовок | `BLENDER-v293`, 12 байт | `BLENDER17-01v0502`, 17 байт |
-| Версия | 3 цифры → 2.93 | 4 цифры → 5.02 |
-| Шапка блока | 16 + размер указателя | **32 байта** |
-| Размер блока | int32 на смещении 4 | **int64 на смещении 16** |
+- Tabs with session persistence between runs (each has its own navigation history)
+- Navigation: address bar, back/forward/up, mouse side buttons, Alt+←/→
+- Virtualized list, system icons, sort by any column
+- **Real Windows context menu** via `IContextMenu` — "New", "Open with", and entries
+  from installed programs; the custom menu stays on Ctrl+Right-click
+- Drag & drop in and out, delete to the Recycle Bin
+- Context menus for drives and favorites, a pinned-addon panel
+- Four palettes: Calm, MS-DOS, Classic, Custom (with an HSV picker)
+- **Details panel** (`F12`): folder tree, type map, size distribution, a Benford's-law
+  check, traversal cost, and a live filesystem-activity indicator
+- Add-ons: [template](examples/addon-template) and a folder-structure generator
+- **Blender**: scene preview and file composition read directly from `.blend`, without
+  launching Blender
+- Rename, clipboard, zoom, auto-refresh of the folder on external changes
 
-Расширение заголовка и 64-битный размер — плата за поддержку файлов больше 4 ГБ.
+**Not yet done**: MFT-index search wired into the shell (the core isn't connected yet),
+thumbnails for regular files, WSL and cloud-folder locations, view modes other than the table.
 
-Что читается: версия Blender, тип сжатия, разрядность указателей, встроенное превью
-(блок `TEST` — сырой RGBA, не PNG) и число датаблоков по двухбуквенным кодам
-(`OB` — объекты, `ME` — меши, `MA` — материалы). У zstd-сжатых файлов доступен только
-заголовок: распаковка потребовала бы сторонней библиотеки.
+## .blend format
 
-## Где лежат данные
+Parsed from real files — the open descriptions of this layout don't match, because it changed
+in newer Blender versions.
 
-Настройки, сессия, избранное, шаблоны, звуки и пользовательские аддоны — в папке `Data`
-**рядом с исполняемым файлом**. Программа переносится вместе со своими данными, и искать
-их в скрытом `AppData` не нужно. Если папка программы недоступна для записи
-(например, установка в `Program Files`), данные уходят в `%APPDATA%\TerminalExplorer` —
-иначе portable-режим молча терял бы настройки. Открыть папку: главное меню → «Папка данных
-программы».
+|                | Old format      | New (Blender 4+)      |
+|----------------|-----------------|-----------------------|
+| Header         | `BLENDER-v293`, 12 bytes | `BLENDER17-01v0502`, 17 bytes |
+| Version        | 3 digits → 2.93 | 4 digits → 5.02       |
+| Block header   | 16 + pointer size | **32 bytes**          |
+| Block size     | int32 at offset 4 | **int64 at offset 16** |
 
-## Аддоны
+The extended header and 64-bit size are the cost of supporting files larger than 4 GB.
 
-Свои аддоны кладутся в `Data\Addons` рядом с программой — по папке на аддон,
-с манифестом `addon.json`. Формат и подстановки описаны в
-[examples/addon-template/README.md](examples/addon-template/README.md); эту папку можно
-скопировать и править под себя.
+What is read: the Blender version, compression type, pointer width, the embedded preview
+(`TEST` block — raw RGBA, not PNG), and the number of datablocks by two-letter codes
+(`OB` — objects, `ME` — meshes, `MA` — materials). For zstd-compressed files only the
+header is available: decompression would require a third-party library.
 
-Встроенный аддон «Генератор структуры папок» создаёт дерево каталогов по шаблону
-(до трёх уровней вложенности) и умеет сохранять шаблоны. Открывается из главного меню,
-по `Ctrl+G` или запуском с аргументом:
+## Where data lives
+
+Settings, session, favorites, templates, sounds, and user add-ons live in a `Data` folder
+**next to the executable**. The program is portable along with its data, and you don't have to
+hunt for them in hidden `AppData`. If the program's folder isn't writable (e.g. an install in
+`Program Files`), the data falls back to `%APPDATA%\TerminalExplorer` — otherwise portable mode
+would silently lose settings. To open the folder: main menu → "Program data folder".
+
+## Add-ons
+
+Custom add-ons go in `Data\Addons` next to the program — one folder per add-on, with an
+`addon.json` manifest. The format and substitutions are described in
+[examples/addon-template/README.md](examples/addon-template/README.md); copy that folder and
+edit it to suit you.
+
+The built-in "Folder structure generator" add-on creates a directory tree from a template (up
+to three levels of nesting) and can save templates. Open it from the main menu, with `Ctrl+G`,
+or by launching with an argument:
 
 ```bash
 TerminalExplorer.exe --folder-tree "C:\Projects"
 ```
 
-### Горячие клавиши
+### Hotkeys
 
-| | |
-|---|---|
-| `Ctrl+T` / `Ctrl+W` | новая вкладка / закрыть |
-| `Ctrl+Tab` | следующая вкладка (`+Shift` — предыдущая) |
-| `Ctrl+L` | фокус в адресную строку |
-| `Alt+←` / `Alt+→` | назад / вперёд (или боковые кнопки мыши) |
-| `Backspace` | на уровень вверх |
-| `F5` | обновить |
-| `F9` | сменить палитру |
-| `F10` | главное меню |
-| `F12` | панель сведений |
-| `F2` | переименовать |
-| `Ctrl+C` / `Ctrl+X` / `Ctrl+V` | копировать / вырезать / вставить |
-| `Ctrl+A` | выделить всё |
-| `Ctrl+колесо`, `Ctrl+±`, `Ctrl+0` | масштаб |
-| `Ctrl+ПКМ` | своё меню вместо системного |
-| `Ctrl+D` | в избранное |
-| `Ctrl+G` | генератор структуры папок |
-| `Delete` | удалить в Корзину |
+|                         |                                                |
+|-------------------------|------------------------------------------------|
+| `Ctrl+T` / `Ctrl+W`     | new tab / close                                |
+| `Ctrl+Tab`              | next tab (`+Shift` — previous)                 |
+| `Ctrl+L`                | focus the address bar                          |
+| `Alt+←` / `Alt+→`       | back / forward (or mouse side buttons)         |
+| `Backspace`             | up one level                                   |
+| `F5`                    | refresh                                        |
+| `F9`                    | switch palette                                 |
+| `F10`                   | main menu                                      |
+| `F12`                   | details panel                                  |
+| `F2`                    | rename                                         |
+| `Ctrl+C` / `Ctrl+X` / `Ctrl+V` | copy / cut / paste                    |
+| `Ctrl+A`                | select all                                     |
+| `Ctrl+wheel`, `Ctrl+±`, `Ctrl+0` | zoom                               |
+| `Ctrl+Right-click`      | custom menu instead of the system one          |
+| `Ctrl+D`                | add to favorites                               |
+| `Ctrl+G`                | folder structure generator                     |
+| `Delete`                | delete to Recycle Bin                          |
 
-Средний клик по вкладке закрывает её. Перетаскивание файлов: обычное — копирование,
-с зажатым `Shift` — перемещение.
+A middle click on a tab closes it. File drag & drop: normal — copy, with `Shift` held — move.
 
-## Требования для сборки
+## Build requirements
 
-- .NET 10 SDK (сейчас в системе только рантаймы, SDK не установлен)
+- .NET 10 SDK (currently only the runtimes are installed, not the SDK)
 - Windows 10 1809+ / Windows 11, x64
 
-## Сборка
+## Build
 
-Двойной клик по `build.cmd` — он проверит наличие SDK и соберёт **один переносимый exe**
-в папку `dist`. Рантайм упакован внутрь: файл можно скопировать на любую машину с Windows x64,
-ставить там ничего не нужно. Размер порядка 40–60 МБ, это цена self-contained сборки.
+Double-click `build.cmd` — it checks for the SDK and produces **a single portable exe** in the
+`dist` folder. The runtime is packed in: the file can be copied to any Windows x64 machine,
+nothing needs to be installed there. The size is on the order of 40–60 MB, the price of a
+self-contained build.
 
-Эквивалент вручную:
+Manual equivalent:
 
 ```bash
 dotnet publish tools/MftProbe -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o dist
 ```
 
-## Запуск
+## Run
 
-`dist\MftProbe.exe` — двойным кликом. Windows сама запросит повышение прав: чтение MFT
-требует открытия тома с `GENERIC_READ`, обычному процессу это недоступно (манифест
-приложения объявляет `requireAdministrator`).
+`dist\MftProbe.exe` — double-click. Windows itself will request elevation: reading the MFT
+requires opening the volume with `GENERIC_READ`, which is unavailable to an ordinary process
+(the app manifest declares `requireAdministrator`).
 
-Первым аргументом можно передать букву диска, по умолчанию `C`:
+You can pass a drive letter as the first argument, `C` by default:
 
 ```bash
 dist\MftProbe.exe D
 ```
 
-Программа выведет лог индексации, метрики памяти и перейдёт в режим интерактивного поиска.
+The program prints an indexing log, memory metrics, and enters an interactive search mode.
 
-## Что проверяет бенчмарк
+## What the benchmark checks
 
-| Гипотеза | Ожидание |
-|---|---|
-| Индексация тома через MFT | секунды, не минуты |
-| Расход памяти на 1 млн записей | порядка 60–90 МБ |
-| Наивный поиск подстроки | десятки миллисекунд |
-| Поиск с биграммными сигнатурами | единицы миллисекунд, отсев 90 %+ |
-| Фактический FP rate против формулы Блума | расхождение из-за неравномерности биграмм |
+| Hypothesis                                       | Expectation                                |
+|--------------------------------------------------|--------------------------------------------|
+| Whole-volume indexing through the MFT            | seconds, not minutes                       |
+| Memory for 1M records                            | on the order of 60–90 MB                   |
+| Naive substring search                           | tens of milliseconds                       |
+| Search with bigram signatures                    | single-digit milliseconds, 90%+ filtered   |
+| Actual FP rate vs the Bloom formula              | divergence due to bigram skew              |
 
-Каждый запрос выполняется дважды — наивным сканом и с фильтром — и результаты сверяются.
-Расхождение в числе найденных означало бы ложноотрицательное срабатывание, которого у фильтра
-Блума быть не может; бенчмарк отдельно проверяет это условие и кричит, если оно нарушено.
+Each query is run twice — naive scan and with the filter — and the results are cross-checked.
+A mismatch in the number of found records would mean a false negative, which a Bloom filter
+cannot produce; the benchmark separately checks this condition and shouts if it's violated.
 
-Команда `log` в режиме поиска показывает накопленный лог процесса.
+The `log` command in search mode shows the accumulated process log.
 
-Если цифры сойдутся — архитектура поиска подтверждена и можно строить оболочку.
-Если нет — менять ядро надо сейчас, а не после написания UI.
+If the numbers line up — the search architecture is confirmed and the shell can be built. If
+not — the core must be changed now, not after writing the UI.
