@@ -1,23 +1,24 @@
-using System.Text;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace TerminalExplorer;
 
 /// <summary>
-/// Правая панель окна поиска: показывает, как запрос обрабатывается фильтром Блума.
+/// Правая панель окна поиска: визуальная схема фильтра Блума.
 ///
-/// Слева направо шаг за шагом:
-///   1. запрос разбивается на n-граммы;
-///   2. каждая n-грамма хешируется в номер бита сигнатуры (NgramBit);
-///   3. для нескольких имен рисуется их 64-битная сигнатура и проверка AND;
-///   4. показывается, сколько имён «отсеяно» и сколько прошло на сравнение.
+/// Не текст «как это работает», а блок-схема из примитивов — видно, как что из чего идёт:
+///   запрос → n-граммы → биты маски → сигнатуры имён → AND-вердикт.
 ///
-/// Логика повторяет ComputeSignature/NgramBit из ядра, но на маленьком наборе данных,
-/// чтобы пользователь видел принцип, а не результат на миллионе имён. Анимация — текстом
-/// в mono-шрифте, в духе MS-DOS.
+/// Каждая n-грамма хешируется (FNV-1a) в номер бита; из них собирается маска запроса.
+/// Для показа имён рисуется их 64-битная сигнатура, и совпавшие с маской биты подсвечиваются.
+/// Цвет тем берётся напрямую из ресурсов, чтобы панель жила в любой палитре.
 /// </summary>
 public partial class BloomPanel : UserControl
 {
+    // Ширина сигнатуры для визуала. 64 бита = 8 байт (как выигравшая конфигурация ядра).
+    private const int Bits = 64;
+
     private string _query = string.Empty;
     private int _matchCount;
 
@@ -36,73 +37,60 @@ public partial class BloomPanel : UserControl
         RenderDemo();
     }
 
+    // ---------- построение схемы ----------
+
     private void RenderDemo()
     {
-        string query = _query;
+        VisualHost.Children.Clear();
 
-        // Пустой запрос — показываем подсказку.
-        if (string.IsNullOrWhiteSpace(query))
+        if (string.IsNullOrWhiteSpace(_query))
         {
-            HeaderText.Text = "КАК РАБОТАЕТ ФИЛЬТР";
-            AsciiText.Text = "Введите запрос, чтобы увидеть,\n" +
-                             "как имя отсеивается сигнатурой.";
+            HeaderText.Text = "КАК РАБОТАЕТ ФИЛЬТР БЛУМА";
+            VisualHost.Children.Add(Label("Введите запрос — панель покажет, как имя отсеивается сигнатурой."));
             return;
         }
 
-        var builder = new StringBuilder();
-        builder.AppendLine("  запрос: " + query);
-        builder.AppendLine();
+        HeaderText.Text = "ФИЛЬТР БЛУМА · запрос \"" + _query + "\" · найдено " + _matchCount;
 
-        var ngrams = BuildNgrams(query);
-        builder.AppendLine("  n-граммы:");
-        builder.AppendLine("    " + string.Join(" ", ngrams));
-        builder.AppendLine();
+        // 1. Запрос
+        VisualHost.Children.Add(StepHeading("1. Запрос"));
+        VisualHost.Children.Add(Block(_query));
 
-        var bits = ngrams.Select(NgramBit).ToArray();
-        builder.AppendLine("  биты маски (по FNV-1a):");
-        builder.AppendLine("    " + string.Join(" ", bits.Select(b => b.ToString())));
-        builder.AppendLine();
+        // 2. n-граммы
+        var ngrams = BuildNgrams(_query);
+        VisualHost.Children.Add(StepHeading("2. Разбивка на биграммы"));
+        VisualHost.Children.Add(ChipsRow(ngrams));
 
-        // Несколько «придуманных» имён: отсев нагляднее на разнородном наборе.
-        string[] names = ["red_sofa.blend", "document.txt", "report.pdf", "sofa_final.blend"];
-        foreach (string name in names)
-        {
-            ulong signature = ComputeSignature(name);
-            bool passes = (signature & Mask(bits)) == Mask(bits);
-            bool contains = name.Contains(query, StringComparison.OrdinalIgnoreCase);
+        // 3. Хеш каждой n-граммы → номер бита
+        var bitIndices = ngrams.Select(NgramBitAt).ToArray();
+        VisualHost.Children.Add(StepHeading("3. Хеш (FNV-1a) → бит маски"));
+        VisualHost.Children.Add(BitLabelsRow(ngrams, bitIndices));
 
-            builder.AppendLine("  имя: " + name);
-            builder.Append("    сигнатура: " + FormatSignature(signature));
-            builder.AppendLine();
-            builder.AppendLine(passes
-                ? "    AND: прошло (возможно совпадение)"
-                : "    AND: отсеяно (не содержит подстроку)");
-            if (passes && !contains)
-                builder.AppendLine("      -> ложноположительное срабатывание (пошло на сравнение, но не совпало)");
-            builder.AppendLine();
-        }
+        // 4. Маска запроса (64 бита)
+        ulong mask = Mask(bitIndices);
+        VisualHost.Children.Add(StepHeading("4. Маска запроса — установленные биты"));
+        VisualHost.Children.Add(BitRow(mask, mask));
 
-        builder.AppendLine("  итог по запросу: найдено " + _matchCount + " вхождений.");
-
-        HeaderText.Text = "КАК РАБОТАЕТ ФИЛЬТР БЛУМА";
-        AsciiText.Text = builder.ToString().TrimEnd();
+        // 5. Имена-кандидаты
+        VisualHost.Children.Add(StepHeading("5. Проверка имён: биты сигнатуры AND маска"));
+        foreach (string name in DemoNames())
+            VisualHost.Children.Add(ExampleBlock(name, mask));
     }
 
     private static List<string> BuildNgrams(string query)
     {
         var result = new List<string>();
-        int n = 2; // биграммы — конфигурация, победившая в BENCHMARKS.md
+        const int n = 2; // биграммы — конфигурация, победившая в BENCHMARKS.md
         for (int i = 0; i + n <= query.Length; i++)
             result.Add(query.Substring(i, n));
         return result;
     }
 
-    private static int NgramBit(string ngram)
+    /// <summary>Бит маски (0..63) для данной n-граммы. Повторяет NgramBit ядра.</summary>
+    private static int NgramBitAt(string ngram)
     {
-        // Повторяет NgramBit из ядра (4096 бит для наглядности; в ядре 64/128/256).
         const uint FnvOffset = 2166136261;
         const uint FnvPrime = 16777619;
-        const int Bits = 4096;
 
         uint hash = FnvOffset;
         foreach (char c in ngram)
@@ -121,7 +109,6 @@ public partial class BloomPanel : UserControl
         return (int)(hash % Bits);
     }
 
-    // Маска запроса: один бит на каждую n-грамму.
     private static ulong Mask(int[] bits)
     {
         ulong mask = 0;
@@ -130,19 +117,203 @@ public partial class BloomPanel : UserControl
         return mask;
     }
 
-    // Сигнатура имени: устанавливаем биты для всех n-грамм.
-    private static ulong ComputeSignature(string name)
+    private static ulong Signature(string name)
     {
         ulong signature = 0;
-        int n = 2;
+        const int n = 2;
         for (int i = 0; i + n <= name.Length; i++)
-        {
-            int bit = NgramBit(name.Substring(i, n));
-            signature |= 1UL << (bit & 63);
-        }
+            signature |= 1UL << (NgramBitAt(name.Substring(i, n)) & 63);
         return signature;
     }
 
-    private static string FormatSignature(ulong signature) =>
-        Convert.ToString((long)signature, 2).PadLeft(64, '0');
+    private static IEnumerable<string> DemoNames()
+    {
+        // Разнородный набор: там, где имя содержит запрос, и где нет.
+        yield return "red_sofa.blend";
+        yield return "document.txt";
+        yield return "report.pdf";
+        yield return "sofa_final.blend";
+    }
+
+    private static bool Contains(string name, string query) =>
+        name.Contains(query, StringComparison.OrdinalIgnoreCase);
+
+    // ---------- примитивы для схемы ----------
+
+    private static UIElement Label(string text) => new TextBlock
+    {
+        Text = text,
+        Foreground = Brush("Dim"),
+        FontFamily = Font("MonoFont"),
+        Margin = new Thickness(0, 2, 0, 6),
+        TextWrapping = TextWrapping.Wrap,
+    };
+
+    private static UIElement StepHeading(string text) => new TextBlock
+    {
+        Text = text,
+        Foreground = Brush("Accent"),
+        FontFamily = Font("MonoFont"),
+        FontWeight = FontWeights.Bold,
+        Margin = new Thickness(0, 12, 0, 4),
+    };
+
+    private static UIElement Block(string text) => new Border
+    {
+        Background = Brush("Surface"),
+        BorderBrush = Brush("Border"),
+        BorderThickness = new Thickness(1),
+        Padding = new Thickness(8, 4, 8, 4),
+        Margin = new Thickness(0, 0, 0, 2),
+        HorizontalAlignment = HorizontalAlignment.Left,
+        Child = new TextBlock
+        {
+            Text = text,
+            Foreground = Brush("Foreground"),
+            FontFamily = Font("MonoFont"),
+        },
+    };
+
+    /// <summary>Ряд чипов с n-граммами (текст + подпись).</summary>
+    private static UIElement ChipsRow(List<string> ngrams)
+    {
+        var panel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 2) };
+
+        foreach (string ngram in ngrams)
+        {
+            panel.Children.Add(new Border
+            {
+                Background = Brush("Selection"),
+                BorderBrush = Brush("Border"),
+                BorderThickness = new Thickness(1),
+                Padding = new Thickness(5, 2, 5, 2),
+                Margin = new Thickness(0, 0, 3, 0),
+                Child = new TextBlock
+                {
+                    Text = ngram,
+                    Foreground = Brush("Foreground"),
+                    FontFamily = Font("MonoFont"),
+                },
+            });
+        }
+
+        return panel;
+    }
+
+    /// <summary>Под каждым чипом — номер бита, в который он хешируется.</summary>
+    private static UIElement BitLabelsRow(List<string> ngrams, int[] bitIndices)
+    {
+        var panel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 2) };
+
+        for (int i = 0; i < ngrams.Count; i++)
+        {
+            panel.Children.Add(new TextBlock
+            {
+                Text = ngrams[i] + " → " + bitIndices[i],
+                Foreground = Brush("Dim"),
+                FontFamily = Font("MonoFont"),
+                Margin = new Thickness(0, 0, 8, 0),
+            });
+        }
+
+        return panel;
+    }
+
+    /// <summary>Строка из 64 бит. highlight — биты, которые подкрашиваются акцентом (совпали/установлены).</summary>
+    private static UIElement BitRow(ulong value, ulong highlight)
+    {
+        var panel = new StackPanel { Orientation = Orientation.Horizontal };
+
+        for (int i = 0; i < Bits; i++)
+        {
+            bool set = (value & (1UL << i)) != 0;
+            bool on = (highlight & (1UL << i)) != 0;
+
+            panel.Children.Add(BitCell(set, on));
+        }
+
+        return panel;
+    }
+
+    /// <summary>Одна ячейка бита. Заливка: установлен + подсвечен → акцент; установлен → поверхность; иначе пусто.</summary>
+    private static Border BitCell(bool set, bool on)
+    {
+        Brush? fill = on
+            ? Brush("Accent")
+            : set
+                ? Brush("BevelLight")
+                : null;
+
+        var cell = new Border
+        {
+            Width = 6,
+            Height = 12,
+            Margin = new Thickness(0.5),
+            BorderBrush = Brush("Border"),
+            BorderThickness = new Thickness(1),
+            Background = fill ?? Brush("Background"),
+        };
+
+        return cell;
+    }
+
+    /// <summary>Один пример имени: имя + его сигнатура + вердикт AND.</summary>
+    private UIElement ExampleBlock(string name, ulong mask)
+    {
+        ulong signature = Signature(name);
+        bool passes = (signature & mask) == mask;
+        bool contains = Contains(name, _query);
+
+        var container = new StackPanel { Margin = new Thickness(0, 8, 0, 0) };
+
+        container.Children.Add(new TextBlock
+        {
+            Text = name,
+            Foreground = contains ? Brush("Accent") : Brush("Foreground"),
+            FontFamily = Font("MonoFont"),
+            FontWeight = contains ? FontWeights.Bold : FontWeights.Normal,
+        });
+
+        container.Children.Add(new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Margin = new Thickness(0, 2, 0, 0),
+            Children = { CreateBitRowView(signature, mask) },
+        });
+
+        string verdict = passes
+            ? (contains ? "      AND: прошло совпадение" : "      AND: прошло (ложноположительное)")
+            : "      AND: отсеяно";
+        container.Children.Add(new TextBlock
+        {
+            Text = verdict,
+            Foreground = passes && !contains ? Brush("Dim") : (passes ? Brush("Accent") : Brush("Dim")),
+            FontFamily = Font("MonoFont"),
+            Margin = new Thickness(0, 2, 0, 0),
+        });
+
+        return container;
+    }
+
+    private StackPanel CreateBitRowView(ulong signature, ulong mask)
+    {
+        var panel = new StackPanel { Orientation = Orientation.Horizontal };
+
+        for (int i = 0; i < Bits; i++)
+        {
+            bool set = (signature & (1UL << i)) != 0;
+            bool inMask = (mask & (1UL << i)) != 0;
+            panel.Children.Add(BitCell(set && inMask, inMask)); // и в маске, и в сигнатуре → акцент
+        }
+
+        return panel;
+    }
+
+    // ---------- доступ к ресурсам темы ----------
+
+    private static FontFamily Font(string key) =>
+        Application.Current.TryFindResource(key) as FontFamily ?? new FontFamily("Consolas");
+
+    private static Brush Brush(string key) =>
+        Application.Current.TryFindResource(key) as Brush ?? Brushes.Gray;
 }

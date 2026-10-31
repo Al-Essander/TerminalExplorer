@@ -7,15 +7,18 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" x:Name="HeaderText" Margin="10,8"
+
+        <!-- Заголовок + лёгкая легенда цветов -->
+        <TextBlock Grid.Row="0" x:Name="HeaderText" Margin="10,8,10,4"
                    Foreground="{DynamicResource Accent}"
                    FontFamily="{DynamicResource MonoFont}"
                    TextWrapping="Wrap"/>
-        <Viewbox Grid.Row="1" Margin="10,0,10,10" Stretch="Uniform"
-                 StretchDirection="DownOnly">
-            <TextBlock x:Name="AsciiText" FontFamily="{DynamicResource MonoFont}"
-                       Foreground="{DynamicResource Foreground}"
-                       TextWrapping="NoWrap"/>
-        </Viewbox>
+
+        <!-- Визуальная блок-схема: строится в коде из примитивов -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Margin="10,0,10,10">
+            <StackPanel x:Name="VisualHost" Margin="0" HorizontalAlignment="Left"/>
+        </ScrollViewer>
     </Grid>
 </UserControl>
